@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
-import { auth, storage, chats } from "../../firebase";
+import { auth, uploadFile, updateProfile } from "../../firebase";
 
 import { validateSingup } from "../../utils/validate";
 
@@ -88,37 +88,23 @@ export default function Singup() {
       setLoading(true);
       await userSignup(email, password);
 
+      //upload file if available
       if (file) {
-        const filePath = `profileImages/${email}/${file.name}`;
-        const fileRef = storage.ref(filePath);
-        const uploadTask = await fileRef.put(file);
-        const profileUrl = await uploadTask.ref.getDownloadURL();
-        const currentUser = auth.currentUser;
-        await currentUser.updateProfile({
-          photoUrl: profileUrl,
+        const downloadUrl = uploadFile(file, email);
+        await updateProfile(auth.currentUser, {
+          photoURL: downloadUrl,
           displayName: username,
         });
-        await chats.users.child(currentUser.uid).set({
-          username: username,
-          photo: profileUrl,
-          email: email,
-          presence: "online",
-        });
       } else {
-        await auth.currentUser.updateProfile({ displayName: username });
-        const currentUser = auth.currentUser;
-        await chats.users.child(currentUser.uid).set({
-          username: username,
-          email: email,
-          presence: "online",
+        await updateProfile(auth.currentUser, {
+          displayName: username,
         });
       }
-
       setLoading(false);
       history.push("/");
     } catch (err) {
       if (err.code === "auth/email-already-in-use")
-        setErrors({ auth: err.message });
+        setErrors({ auth: "Email already in use" });
       console.log(err);
       setLoading(false);
     }

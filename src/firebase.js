@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -8,6 +9,7 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -23,6 +25,7 @@ initializeApp(firebaseConfig);
 
 const database = getFirestore();
 const auth = getAuth();
+const storage = getStorage();
 
 //collections
 const projects = collection(database, "projects");
@@ -46,12 +49,33 @@ const authStateChanged = () =>
     return user;
   });
 
+//file upload
+const uploadFile = async (file, email) => {
+  const fileRef = ref(storage, `profileImages/${email}/${file.name}`);
+  const uploadJob = uploadBytes(fileRef, file);
+  uploadJob.on(
+    "state_changed",
+    (error) => {
+      return error;
+    },
+    () => {
+      getDownloadURL(uploadJob.snapshot.ref).then((downloadURL) => {
+        return downloadURL;
+      });
+    }
+  );
+};
+
 export {
   projects,
   tasks,
+  storage,
+  auth,
+  uploadFile,
   signinWithEmail,
   createAccountWithEmail,
   userLogout,
   authStateChanged,
   authenticateWithGoogle,
+  updateProfile,
 };
