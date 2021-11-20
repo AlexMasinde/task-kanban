@@ -1,0 +1,52 @@
+.formcontainer {
+  width: 32.4em;
+  margin: 20em auto 0;
+}
+
+.formcontainer > h1 {
+  font-size: 3.3rem;
+  line-height: 4.1rem;
+  font-weight: 700;
+  margin-bottom: 1.4rem;
+  text-align: center;
+}
+
+.formcontainer > p {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  margin-bottom: 2.3rem;
+  text-align: center;
+}
+
+form > p {
+  font-size: 1.4rem;
+  color: red;
+  margin: 1rem 0;
+}
+
+.red {
+  color: red;
+}
+
+.login {
+  font-size: 1.6rem;
+  margin-top: 1.4rem;
+}
+
+.login > a {
+  display: inline-block;
+  text-decoration: none;
+  color: #615ef0;
+}
+
+.login > a:visited {
+  color: #615ef0;
+}
+
+.google {
+  margin-top: 1.4em;
+}
+
+.google:hover {
+  cursor: pointer;
+}

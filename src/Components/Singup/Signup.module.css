@@ -1,0 +1,88 @@
+.formcontainer {
+  width: 32.4em;
+  margin: 20em auto 0;
+}
+
+.formcontainer > h1 {
+  font-size: 3.3rem;
+  line-height: 4.1rem;
+  font-weight: 700;
+  margin-bottom: 1.4rem;
+  text-align: center;
+}
+
+.formcontainer > p {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  margin-bottom: 2.3rem;
+  text-align: center;
+}
+
+form > p {
+  font-size: 1.4rem;
+  color: red;
+  margin: 1rem 0;
+}
+
+.red {
+  color: red;
+}
+
+.file > label {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.4em;
+}
+
+.file > label:hover {
+  cursor: pointer;
+}
+
+.file > label > input {
+  display: none;
+}
+
+.file > label > p {
+  color: #615ef0;
+  border: 1px solid #615ef0;
+  border-radius: 1rem;
+  font-size: 1.6rem;
+  transition: 0.5s;
+  padding: 0.6rem 3rem;
+}
+
+.file > label > p:hover {
+  background-color: #615ef0;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.file > label > span {
+  font-size: 1.6rem;
+  padding: 0.6rem 0.1rem;
+}
+
+.login {
+  font-size: 1.6rem;
+  margin-top: 1.4rem;
+}
+
+.login > a {
+  display: inline-block;
+  text-decoration: none;
+  color: #615ef0;
+}
+
+.login > a:visited {
+  color: #615ef0;
+}
+
+.google {
+  margin-top: 1.4em;
+}
+
+.google:hover {
+  cursor: pointer;
+}
