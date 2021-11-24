@@ -5,17 +5,17 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import validate from "../../utils/validate";
 
-import Input from "../Input/Input";
-import Button from "../Button/Button";
-
 import emailicon from "../../icons/emailicon.svg";
 import passwordicon from "../../icons/passwordicon.svg";
 
-import LoginStyles from "./Login.module.css";
+import Input from "../Input/Input";
+import Button from "../Button/Button";
 import WithGoogle from "../WithGoogle/WithGoogle";
 
-export default function Login() {
-  const { userLogin, googleSignin } = useAuth();
+import SignupStyles from "./Signup.module.css";
+
+export default function Singup() {
+  const { userSignup, googleSignin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -36,31 +36,24 @@ export default function Login() {
     if (errors) {
       errors.password = "";
     }
-    console.log(password);
   }
 
-  async function handleLogin(e) {
+  async function handleSignup(e) {
     e.preventDefault();
     const { errors, valid } = validate(email, password);
-
-    if (!valid) {
-      return setErrors(errors);
-    }
+    if (!valid) return setErrors(errors);
 
     try {
-      setErrors();
+      setErrors({});
       setLoading(true);
-      await userLogin(email, password);
-      setLoading(false);
+      await userSignup(email, password);
       navigate("/");
+      setLoading(false);
     } catch (err) {
+      if (err.code === "auth/email-already-in-use") {
+        setErrors({ auth: "Email salready in use" });
+      }
       console.log(err);
-      if (err.code === "auth/user-not-found") {
-        setErrors({ ...errors, auth: "User not found" });
-      }
-      if (err.code === "auth/wrong-password") {
-        setErrors({ ...errors, auth: "Wrong password" });
-      }
       setLoading(false);
     }
   }
@@ -81,15 +74,15 @@ export default function Login() {
   }
 
   return (
-    <div className={LoginStyles.container}>
-      <div className={LoginStyles.formcontainer}>
-        <h1>Log in</h1>
-        <p className={authError ? LoginStyles.red : ""}>
-          {authError ? errors.auth : "Enter your email and password below"}
+    <div className={SignupStyles.container}>
+      <div className={SignupStyles.formcontainer}>
+        <h1>Register!</h1>
+        <p className={authError ? SignupStyles.red : ""}>
+          {authError ? errors.auth : "Use your email or Google account"}
         </p>
-        <form onSubmit={(e) => handleLogin(e)}>
+        <form onSubmit={(e) => handleSignup(e)}>
           <Input
-            type="text"
+            type="email"
             icon={emailicon}
             placeholder="Email"
             alt="Email"
@@ -104,17 +97,16 @@ export default function Login() {
             onChange={handlePassword}
           />
           {errors && errors.password && <p>{errors.password}</p>}
-
-          <Button type="submit" loading={loading} text="Login" />
+          <Button type="submit" loading={loading} text="Signup" />
         </form>
-        <div onClick={() => handleGoogle()} className={LoginStyles.google}>
+        <div onClick={handleGoogle} className={SignupStyles.google}>
           <WithGoogle text="Sign in with Google" loading={loading} />
         </div>
         <div disabled={loading}>
-          <p className={LoginStyles.login}>
+          <p className={SignupStyles.login}>
             Don't have an account? &nbsp;
-            <Link to="/signup">
-              <span>Signup</span>
+            <Link to="/login">
+              <span className={SignupStyles.link}>Login</span>
             </Link>
           </p>
         </div>

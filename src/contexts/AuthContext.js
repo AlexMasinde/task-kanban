@@ -1,10 +1,15 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+
 import {
-  authenticateWithGoogle,
-  createAccountWithEmail,
-  signinWithEmail,
-  userLogout,
-} from "../firebase";
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+
+import { auth } from "../firebase";
 
 const AuthContext = createContext();
 
@@ -17,27 +22,28 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   function userSignup(email, password) {
-    return createAccountWithEmail(email, password);
+    return createUserWithEmailAndPassword(auth, email, password);
   }
 
   function userLogin(email, password) {
-    return signinWithEmail(email, password);
+    return signInWithEmailAndPassword(auth, email, password);
   }
 
-  function withGoogle() {
-    return authenticateWithGoogle;
+  function googleSignin() {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider);
   }
 
   function deleteAccount() {
     return auth.currentUser.delete();
   }
 
-  function signout() {
-    return userLogout();
+  function userSingOut() {
+    return signOut(auth);
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
     });
@@ -49,9 +55,9 @@ export function AuthProvider({ children }) {
     loading,
     setCurrentUser,
     userSignup,
-    signout,
+    userSingOut,
     userLogin,
-    withGoogle,
+    googleSignin,
     deleteAccount,
   };
 
