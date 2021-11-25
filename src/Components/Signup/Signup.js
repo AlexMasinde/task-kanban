@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
 
-import validate from "../../utils/validate";
+import { validateUserDetails } from "../../utils/validate";
 
 import emailicon from "../../icons/emailicon.svg";
 import passwordicon from "../../icons/passwordicon.svg";
@@ -40,7 +40,7 @@ export default function Singup() {
 
   async function handleSignup(e) {
     e.preventDefault();
-    const { errors, valid } = validate(email, password);
+    const { errors, valid } = validateUserDetails(email, password);
     if (!valid) return setErrors(errors);
 
     try {

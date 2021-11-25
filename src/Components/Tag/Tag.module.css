@@ -1,0 +1,27 @@
+.container {
+  width: fit-content;
+}
+
+.tag {
+  color: #ffffff;
+  padding: 0.2em 0.4em;
+  border-radius: 0.4em;
+  display: flex;
+  align-items: center;
+  padding: 0.2em 0.4em;
+}
+
+.tag > p {
+  font-size: 1.4rem;
+}
+
+.tag > img {
+  width: 1.3em;
+  height: 1.3em;
+  display: block;
+  margin-left: 1em;
+}
+
+.tag > img:hover {
+  cursor: pointer;
+}

@@ -1,0 +1,60 @@
+.container {
+  position: relative;
+  max-height: 3.1em;
+}
+.dropdown {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0.6em 1.2em;
+  border-radius: 0.4em;
+  margin-top: 1em;
+  justify-content: space-between;
+}
+
+.tags {
+  display: flex;
+}
+
+.tags > p {
+  font-size: 1.5rem;
+}
+
+.tags > div:not(:first-child) {
+  margin-left: 0.4em;
+}
+
+.listitem {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.selectimage {
+  cursor: pointer;
+  padding-left: 1.2em;
+}
+
+.selectimage > img {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.tags > p {
+  cursor: pointer;
+}
+
+.list {
+  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.4em;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+}
+
+.list > div {
+  padding: 0.3em;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
+}

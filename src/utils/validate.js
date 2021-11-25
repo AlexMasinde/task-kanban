@@ -1,7 +1,9 @@
-export default function validate(email, password) {
+import isEmail from "validator/lib/isEmail";
+import isURL from "validator/lib/isURL";
+
+export function validateUserDetails(email, password) {
   const errors = {};
-  const emailRegex = /\S+@\S+\.\S+/;
-  if (!emailRegex.test(email)) {
+  if (!isEmail(email)) {
     errors.email = "Please provide a valid email address";
   }
   if (password.length < 6) {
@@ -11,5 +13,35 @@ export default function validate(email, password) {
   return {
     errors,
     valid: Object.keys(errors) < 1,
+  };
+}
+
+export function validateProject(
+  name,
+  description,
+  documentLink,
+  designLink,
+  selectedTags
+) {
+  const errors = {};
+  if (name.trim() === "") {
+    errors.name = "Name is required";
+  }
+  if (description.trim() === "") {
+    errors.description = "Description is required";
+  }
+  if (!isURL(documentLink)) {
+    errors.documentLink = "Please provide a valid document URL";
+  }
+  if (!isURL(designLink)) {
+    errors.designLink = "Please provide a valid design URL";
+  }
+  if (selectedTags.length === 0) {
+    errors.selectedTags = "Please select at least one tag";
+  }
+
+  return {
+    valid: Object.keys(errors) < 1,
+    errors,
   };
 }

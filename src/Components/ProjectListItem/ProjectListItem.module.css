@@ -1,0 +1,35 @@
+.container {
+  border-radius: 0.6em;
+  padding: 1em;
+}
+
+.container:hover {
+  cursor: pointer;
+}
+
+.container > h3 {
+  font-weight: medium;
+  font-size: 1.6rem;
+  line-height: 110%;
+}
+
+.container > h3,
+.description {
+  margin-bottom: 0.3em;
+}
+
+.description {
+  font-size: 1.3rem;
+  line-height: 150%;
+}
+
+.date {
+  color: grey;
+  font-size: 1.3rem;
+  font-style: italic;
+  text-align: right;
+}
+
+.loading {
+  background-color: rgba(203, 150, 71, 0.1);
+}
