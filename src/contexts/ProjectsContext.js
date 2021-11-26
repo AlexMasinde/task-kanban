@@ -23,6 +23,10 @@ function reducer(state, action) {
       return { ...state, projectsError: action.payload };
     case "SET_PROJECTS_LOADING":
       return { ...state, projectsLoading: action.payload };
+    case "SET_EDIT_PROJECT":
+      return { ...state, editProject: action.payload };
+    case "SET_DELETE_PROJECT":
+      return { ...state, deleteProject: action.payload };
     default:
       return state;
   }
@@ -33,6 +37,8 @@ const initialState = {
   projectsError: null,
   projectsLoading: false,
   selectedProject: null,
+  editProject: null,
+  deleteProject: null,
 };
 
 export function ProjectsProvider({ children }) {
@@ -72,6 +78,7 @@ export function ProjectsProvider({ children }) {
 
   return (
     <ProjectsContext.Provider value={value}>
+      {console.log(state.editProject)}
       {children}
     </ProjectsContext.Provider>
   );

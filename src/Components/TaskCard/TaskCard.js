@@ -1,30 +1,60 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
+import { useTasks } from "../../contexts/TasksContext";
+import { useProjects } from "../../contexts/ProjectsContext";
 
 import arrowright from "../../icons/arrowright.svg";
 import doc from "../../icons/doc.svg";
 import figma from "../../icons/figma.svg";
+import edittask from "../../icons/edittask.svg";
+import deleteicon from "../../icons/deleteicon.svg";
 
 import TaskCardStyles from "./TaskCard.module.css";
 
-export default function TaskCard({ task }) {
+export default function TaskCard({ task, taskGroup }) {
+  const { setEditTask, setDeleteTask } = useTasks();
+  const { deleteProject, dispatch } = useProjects();
   const { name, description, createdAt, designLink, documentLink, tags } = task;
+  const navigate = useNavigate();
 
   const options = { day: "numeric", month: "short" };
   const date = createdAt.toDate().toLocaleDateString("en-UK", options);
 
+  function editTask() {
+    setEditTask(task);
+    navigate(`addtask/${taskGroup}`);
+  }
+
+  function deleteTask() {
+    if (deleteProject) {
+      dispatch({
+        type: "SET_DELETE_PROJECT",
+        payload: null,
+      });
+    }
+    setDeleteTask(task);
+  }
+
   return (
     <div className={TaskCardStyles.container}>
-      <div className={TaskCardStyles.tagscontainer}>
-        {tags.map((tag) => {
-          return (
-            <div
-              style={{ background: `${tag.color}` }}
-              className={TaskCardStyles.tag}
-            >
-              <p>{tag.name}</p>
-            </div>
-          );
-        })}
+      <div className={TaskCardStyles.header}>
+        <div className={TaskCardStyles.tagscontainer}>
+          {tags.map((tag) => {
+            return (
+              <div
+                style={{ background: `${tag.color}` }}
+                className={TaskCardStyles.tag}
+              >
+                <p>{tag.name}</p>
+              </div>
+            );
+          })}
+        </div>
+        <div className={TaskCardStyles.headericons}>
+          <img onClick={deleteTask} src={deleteicon} alt="delete task" />
+          <img onClick={editTask} src={edittask} alt="edit task" />
+        </div>
       </div>
       <div className={TaskCardStyles.name}>
         <p>{name}</p>

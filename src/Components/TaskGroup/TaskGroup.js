@@ -11,11 +11,12 @@ import TaskGroupStyles from "./TaskGroup.module.css";
 
 export default function TaskGroup({ taskGroup }) {
   const navigate = useNavigate();
-  const { tasks } = useTasks();
+  const { tasks, setEditTask } = useTasks();
 
   const taskGroupTasks = tasks.filter((task) => task.status === taskGroup);
 
   function addTask() {
+    setEditTask(null);
     navigate(`addtask/${taskGroup}`);
   }
 
@@ -36,7 +37,7 @@ export default function TaskGroup({ taskGroup }) {
       </div>
       <div className={TaskGroupStyles.cardscontainer}>
         {taskGroupTasks.map((taskGroupTask) => {
-          return <TaskCard task={taskGroupTask} />;
+          return <TaskCard taskGroup={taskGroup} task={taskGroupTask} />;
         })}
         <div onClick={addTask} className={TaskGroupStyles.add}>
           <img src={add} alt="add task" />

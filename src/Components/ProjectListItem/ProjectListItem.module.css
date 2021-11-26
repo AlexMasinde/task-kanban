@@ -7,10 +7,32 @@
   cursor: pointer;
 }
 
-.container > h3 {
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header > h3 {
   font-weight: medium;
   font-size: 1.6rem;
   line-height: 110%;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+}
+
+.icons > img {
+  height: 2em;
+  width: 2em;
+  display: block;
+  z-index: 1000;
+}
+
+.icons > img:last-child {
+  margin-left: 1em;
 }
 
 .container > h3,

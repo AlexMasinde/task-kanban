@@ -8,10 +8,17 @@ import ProjectListItem from "../ProjectListItem/ProjectListItem";
 import SidebarStyles from "./Sidebar.module.css";
 
 export default function Sidebar() {
-  const { projectsError, projects, projectsLoading } = useProjects();
+  const { projectsError, projects, projectsLoading, editProject, dispatch } =
+    useProjects();
   const navigate = useNavigate();
 
   function addProject() {
+    if (editProject) {
+      dispatch({
+        type: "SET_EDIT_PROJECT",
+        payload: null,
+      });
+    }
     navigate("newproject");
   }
 

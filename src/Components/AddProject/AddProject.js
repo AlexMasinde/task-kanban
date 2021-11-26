@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  doc,
+  updateDoc,
+} from "@firebase/firestore";
 
 import { database } from "../../firebase";
 
 import { useAuth } from "../../contexts/AuthContext";
+import { useProjects } from "../../contexts/ProjectsContext";
+
+import sameTags from "../../utils/compareTags";
 
 import { validateProject } from "../../utils/validate";
 
@@ -14,11 +23,23 @@ import AddProjectStyles from "./AddProject.module.css";
 
 export default function Addproject() {
   const { currentUser } = useAuth();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [documentLink, setDocumentLink] = useState("");
-  const [designLink, setDesignLink] = useState("");
-  const [selectedTags, setSelectedTags] = useState([]);
+  const { editProject, dispatch } = useProjects();
+  const editing = editProject !== null;
+
+  const [name, setName] = useState(editing ? editProject.name : "");
+  const [description, setDescription] = useState(
+    editing ? editProject.description : ""
+  );
+  const [documentLink, setDocumentLink] = useState(
+    editing ? editProject.documentLink : ""
+  );
+  const [designLink, setDesignLink] = useState(
+    editing ? editProject.designLink : ""
+  );
+  const [selectedTags, setSelectedTags] = useState(
+    editing ? editProject.tags : []
+  );
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -73,15 +94,46 @@ export default function Addproject() {
     try {
       setErrors({});
       setLoading(true);
-      await addDoc(collection(database, "projects"), {
-        name,
-        description,
-        documentLink,
-        designLink,
-        tags: selectedTags,
-        user: currentUser.uid,
-        createdAt: serverTimestamp(),
-      });
+      if (editing) {
+        const updatedProject = {};
+
+        if (name !== editProject.name) {
+          updatedProject.name = name;
+        }
+
+        if (description !== editProject.description) {
+          updatedProject.description = description;
+        }
+
+        if (documentLink !== editProject.documentLink) {
+          updatedProject.documentLink = documentLink;
+        }
+
+        if (designLink !== editProject.designLink) {
+          updatedProject.designLink = designLink;
+        }
+
+        if (!sameTags(selectedTags, editProject.tags)) {
+          updatedProject.tags = selectedTags;
+        }
+
+        if (Object.keys(updatedProject).length > 0) {
+          const updateRef = doc(database, "projects", editProject.id);
+          await updateDoc(updateRef, updatedProject);
+        }
+        dispatch({ type: "SET_EDIT_PROJECT", payload: null });
+      } else {
+        await addDoc(collection(database, "projects"), {
+          name,
+          description,
+          documentLink,
+          designLink,
+          tags: selectedTags,
+          user: currentUser.uid,
+          createdAt: serverTimestamp(),
+        });
+      }
+
       setLoading(false);
       navigate("/");
     } catch (err) {
@@ -100,12 +152,13 @@ export default function Addproject() {
         <h3>Add a new project</h3>
         <label>
           Project Name
-          <input onChange={handleName} type="text" />
+          <input value={name} onChange={handleName} type="text" />
         </label>
         {errors.name && <p>{errors.name}</p>}
         <label>
           Project Description
           <textarea
+            value={description}
             onChange={handleDescription}
             rows="4"
             cols="50"
@@ -114,13 +167,17 @@ export default function Addproject() {
         </label>
         {errors.description && <p>{errors.description}</p>}
         <label>
-          SRS Link
-          <input onChange={handleDocumentLink} type="text" />
+          SRS Document Link
+          <input
+            value={documentLink}
+            onChange={handleDocumentLink}
+            type="text"
+          />
         </label>
         {errors.documentLink && <p>{errors.documentLink}</p>}
         <label>
           Design Link
-          <input onChange={handleDesignLink} type="text" />
+          <input value={designLink} onChange={handleDesignLink} type="text" />
         </label>
         {errors.designLink && <p>{errors.designLink}</p>}
         <div className={AddProjectStyles.tags}>

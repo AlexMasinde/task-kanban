@@ -5,6 +5,31 @@
   border-radius: 0.6em;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.headericons {
+  display: flex;
+  align-items: center;
+}
+
+.headericons > img {
+  height: 2em;
+  width: 2em;
+  display: block;
+}
+
+.headericons > img:last-child {
+  margin-left: 1em;
+}
+.headericons > img:hover {
+  cursor: pointer;
+}
+
 .tagscontainer {
   display: flex;
 }

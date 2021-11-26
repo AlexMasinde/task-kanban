@@ -14,10 +14,13 @@ export function useTasks() {
 export function TasksProvider({ children }) {
   const [tasksLoading, setTasksLoading] = useState(false);
   const [tasksError, setTasksError] = useState(null);
+  const [editTask, setEditTask] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [deleteTask, setDeleteTask] = useState(null);
   const { selectedProject } = useProjects();
 
   useEffect(() => {
+    if (!selectedProject) return;
     async function fetchTasks() {
       try {
         setTasksError(null);
@@ -45,6 +48,10 @@ export function TasksProvider({ children }) {
     tasks,
     tasksLoading,
     tasksError,
+    editTask,
+    deleteTask,
+    setDeleteTask,
+    setEditTask,
     setTasks,
   };
 

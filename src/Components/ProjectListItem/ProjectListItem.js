@@ -1,11 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router";
+
 import { useProjects } from "../../contexts/ProjectsContext";
+
+import edittask from "../../icons/edittask.svg";
+import deleteicon from "../../icons/deleteicon.svg";
 
 import ProjectListItemStyles from "./ProjectListItem.module.css";
 
 export default function ProjectListItem({ project }) {
   const { dispatch, selectedProject } = useProjects();
   const { createdAt, description, name } = project;
+  const navigate = useNavigate();
+
   const transformedDate = createdAt.toDate();
   const dayDateOptions = {
     year: "numeric",
@@ -24,6 +31,21 @@ export default function ProjectListItem({ project }) {
     });
   }
 
+  function editProject() {
+    dispatch({
+      type: "SET_EDIT_PROJECT",
+      payload: project,
+    });
+    navigate("newproject");
+  }
+
+  function deleteProject() {
+    dispatch({
+      type: "SET_DELETE_PROJECT",
+      payload: project,
+    });
+  }
+
   const selected = selectedProject && project.id === selectedProject.id;
 
   return (
@@ -35,7 +57,13 @@ export default function ProjectListItem({ project }) {
           : `${ProjectListItemStyles.container}`
       }
     >
-      <h3>{name}</h3>
+      <div className={ProjectListItemStyles.header}>
+        <h3>{name}</h3>
+        <div className={ProjectListItemStyles.icons}>
+          <img onClick={deleteProject} src={deleteicon} alt="delete project" />
+          <img onClick={editProject} src={edittask} alt="edit project" />
+        </div>
+      </div>
       <p className={ProjectListItemStyles.description}>{description}</p>
       <p className={ProjectListItemStyles.date}>{`${dayDate} at ${time}`}</p>
     </div>

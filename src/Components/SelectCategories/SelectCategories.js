@@ -17,11 +17,11 @@ export default function SelectCategories({ selectedTags, setSelectedTags }) {
 
   function addTags(tag) {
     setSelect(false);
-    if (selectedTags.includes(tag)) {
+    if (selectedTags.find((selectedTag) => selectedTag.name === tag.name)) {
       return;
     }
+
     setSelectedTags([...selectedTags, tag]);
-    console.log(selectedTags);
   }
 
   function removeTag(tag) {
