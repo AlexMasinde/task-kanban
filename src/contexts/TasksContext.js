@@ -22,11 +22,11 @@ export function TasksProvider({ children }) {
       try {
         setTasksError(null);
         setTasksLoading(true);
-        const tasksQuery = query(collection(database, "tasks"));
-        const tasksData = await getDocs(
-          tasksQuery,
+        const tasksQuery = query(
+          collection(database, "tasks"),
           where("projectId", "==", selectedProject.id)
         );
+        const tasksData = await getDocs(tasksQuery);
         const tasks = tasksData.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });

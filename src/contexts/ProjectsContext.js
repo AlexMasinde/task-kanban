@@ -44,11 +44,11 @@ export function ProjectsProvider({ children }) {
       try {
         dispatch({ type: "SET_PROJECTS_LOADING", payload: true });
         dispatch({ type: "SET_PROJECTS_ERROR", payload: null });
-        const projectsQuery = query(collection(database, "projects"));
-        const dataSnapshot = await getDocs(
-          projectsQuery,
+        const projectsQuery = query(
+          collection(database, "projects"),
           where("user", "==", currentUser.uid)
         );
+        const dataSnapshot = await getDocs(projectsQuery);
         const projectsData = dataSnapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id };
         });
