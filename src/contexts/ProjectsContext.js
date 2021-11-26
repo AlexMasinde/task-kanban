@@ -72,7 +72,6 @@ export function ProjectsProvider({ children }) {
 
   return (
     <ProjectsContext.Provider value={value}>
-      {console.log(state.selectedProject)}
       {children}
     </ProjectsContext.Provider>
   );

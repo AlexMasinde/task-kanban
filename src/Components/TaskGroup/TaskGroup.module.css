@@ -1,0 +1,44 @@
+.container {
+  max-width: 34.8em;
+}
+
+.cardscontainer {
+  background: #f3f3f3;
+  padding: 1.6em 1em;
+}
+
+.cardscontainer > div:not(:first-child) {
+  margin-top: 1.6em;
+}
+
+.header {
+  border-radius: 0.6em 0.6em 0 0;
+  padding: 0.9em 0;
+}
+
+.header > h3 {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.7rem;
+  text-align: center;
+}
+
+.add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1.5em;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  margin-top: 1em;
+  cursor: pointer;
+}
+
+.add > p {
+  font-size: 1.3rem;
+  color: #80878f;
+  opacity: 0.6;
+}

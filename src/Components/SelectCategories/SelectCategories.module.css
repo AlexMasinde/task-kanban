@@ -58,3 +58,28 @@
   padding: 0.3em;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.2);
 }
+
+.tag {
+  color: #ffffff;
+  padding: 0.2em 0.4em;
+  border-radius: 0.4em;
+  display: flex;
+  align-items: center;
+  padding: 0.2em 0.4em;
+  width: fit-content;
+}
+
+.tag > img {
+  width: 1.3em;
+  height: 1.3em;
+  display: block;
+  margin-left: 1em;
+}
+
+.tag > img:hover {
+  cursor: pointer;
+}
+
+.tag > p {
+  font-size: 1.4rem;
+}

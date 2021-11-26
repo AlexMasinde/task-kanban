@@ -1,19 +1,21 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
 
 import { database } from "../../firebase";
 
 import { useAuth } from "../../contexts/AuthContext";
+import { useProjects } from "../../contexts/ProjectsContext";
 
 import { validateProject } from "../../utils/validate";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
 
-import AddProjectStyles from "./AddProject.module.css";
+import AddTaskStyles from "./AddTask.module.css";
 
-export default function Addproject() {
+export default function AddTask() {
   const { currentUser } = useAuth();
+  const { selectedProject } = useProjects();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [documentLink, setDocumentLink] = useState("");
@@ -21,6 +23,7 @@ export default function Addproject() {
   const [selectedTags, setSelectedTags] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const { taskGroup } = useParams();
   const navigate = useNavigate();
 
   function handleName(e) {
@@ -73,12 +76,14 @@ export default function Addproject() {
     try {
       setErrors({});
       setLoading(true);
-      await addDoc(collection(database, "projects"), {
+      await addDoc(collection(database, "tasks"), {
         name,
         description,
         documentLink,
         designLink,
+        status: taskGroup,
         tags: selectedTags,
+        projectId: selectedProject.id,
         user: currentUser.uid,
         createdAt: serverTimestamp(),
       });
@@ -95,16 +100,16 @@ export default function Addproject() {
   }
 
   return (
-    <div className={AddProjectStyles.container}>
+    <div className={AddTaskStyles.container}>
       <form onSubmit={handleSubmit}>
-        <h3>Add a new project</h3>
+        <h3>Add New Task</h3>
         <label>
-          Project Name
+          Task Name
           <input onChange={handleName} type="text" />
         </label>
         {errors.name && <p>{errors.name}</p>}
         <label>
-          Project Description
+          Task Description
           <textarea
             onChange={handleDescription}
             rows="4"
@@ -114,28 +119,29 @@ export default function Addproject() {
         </label>
         {errors.description && <p>{errors.description}</p>}
         <label>
-          SRS Link
+          SRS Document Link
           <input onChange={handleDocumentLink} type="text" />
         </label>
         {errors.documentLink && <p>{errors.documentLink}</p>}
         <label>
-          Design Link
+          Figma Design Link
           <input onChange={handleDesignLink} type="text" />
         </label>
         {errors.designLink && <p>{errors.designLink}</p>}
-        <div className={AddProjectStyles.tags}>
+        <div className={AddTaskStyles.tags}>
           <SelectCategories
             selectedTags={selectedTags}
             setSelectedTags={setSelectedTags}
+            tags={selectedProject.tags}
           />
         </div>
         {errors.selectedTags && selectedTags.length === 0 && (
           <p>{errors.selectedTags}</p>
         )}
-        <div className={AddProjectStyles.buttons}>
+        <div className={AddTaskStyles.buttons}>
           <button
             disabled={loading}
-            className={loading ? `${AddProjectStyles.loading}` : ""}
+            className={loading ? `${AddTaskStyles.loading}` : ""}
             type="submit"
           >
             Submit

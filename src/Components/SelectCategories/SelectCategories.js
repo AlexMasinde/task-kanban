@@ -4,9 +4,9 @@ import { categories } from "../../utils/categories";
 
 import arrowdown from "../../icons/arrowdown.svg";
 import arrowup from "../../icons/arrowup.svg";
+import closeicon from "../../icons/closeicon.svg";
 
 import SelectCategoriesStyles from "./SelectCategories.module.css";
-import Tag from "../Tag/Tag";
 
 export default function SelectCategories({ selectedTags, setSelectedTags }) {
   const [select, setSelect] = useState(false);
@@ -21,10 +21,13 @@ export default function SelectCategories({ selectedTags, setSelectedTags }) {
       return;
     }
     setSelectedTags([...selectedTags, tag]);
+    console.log(selectedTags);
   }
 
   function removeTag(tag) {
-    const newTags = selectedTags.filter((t) => t.name !== tag.name);
+    const newTags = selectedTags.filter(
+      (selectedTag) => selectedTag.name !== tag.name
+    );
     setSelectedTags(newTags);
   }
 
@@ -33,7 +36,19 @@ export default function SelectCategories({ selectedTags, setSelectedTags }) {
       <div className={SelectCategoriesStyles.dropdown}>
         <div className={SelectCategoriesStyles.tags}>
           {selectedTags.length > 0 ? (
-            selectedTags.map((tag) => <Tag tag={tag} removeTag={removeTag} />)
+            selectedTags.map((tag) => (
+              <div
+                style={{ background: `${tag.color}` }}
+                className={SelectCategoriesStyles.tag}
+              >
+                <p>{tag.name}</p>
+                <img
+                  src={closeicon}
+                  alt="remove"
+                  onClick={() => removeTag(tag)}
+                />
+              </div>
+            ))
           ) : (
             <p onClick={selectTags}>Select Tags</p>
           )}
