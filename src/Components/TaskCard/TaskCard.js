@@ -36,8 +36,16 @@ export default function TaskCard({ task, taskGroup }) {
     setDeleteTask(task);
   }
 
+  function handleDragStart(e, id) {
+    e.dataTransfer.setData("text/plain", id);
+  }
+
   return (
-    <div className={TaskCardStyles.container}>
+    <div
+      draggable
+      onDragStart={(e) => handleDragStart(e, task.id)}
+      className={TaskCardStyles.container}
+    >
       <div className={TaskCardStyles.header}>
         <div className={TaskCardStyles.tagscontainer}>
           {tags.map((tag) => {
