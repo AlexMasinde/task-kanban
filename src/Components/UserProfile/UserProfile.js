@@ -12,7 +12,9 @@ export default function UserProfile() {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(
+    currentUser.displayName ?? "User Name"
+  );
   const [imageUploadError, setImageUploadError] = useState(null);
 
   //upload user image
@@ -40,7 +42,7 @@ export default function UserProfile() {
 
   return (
     <div className={UserProfileStyles.container}>
-      {console.log(itemToEdit)}
+      {console.log(currentUser)}
       <div className={UserProfileStyles.photo}>
         <img src={currentUser.photoURL ?? user} alt="current user" />
         <label>
@@ -52,9 +54,7 @@ export default function UserProfile() {
       </div>
       <div className={UserProfileStyles.details}>
         <div className={UserProfileStyles.username}>
-          <p contentEditable={itemToEdit}>
-            {currentUser.displayName ?? "User Name"}
-          </p>
+          <input type="text" value={userName} />
           <img
             src={edit}
             onClick={() => setItemToEdit(true)}

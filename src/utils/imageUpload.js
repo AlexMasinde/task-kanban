@@ -4,8 +4,8 @@ import {
   ref,
   uploadBytes,
 } from "@firebase/storage";
-
 import { updateProfile } from "@firebase/auth";
+import { v4 as uuidv4 } from "uuid";
 
 import { auth } from "../firebase";
 
@@ -25,22 +25,13 @@ export function imageValidate(image) {
   };
 }
 
-//upload imge to firebase
+//upload image to firebase
 export async function uploadImage(image) {
   const currentUser = auth.currentUser;
-  const imageName = image.name;
 
   const storage = getStorage();
 
-  const imageRef = ref(storage, imageName);
-
-  const allImagesRef = ref(
-    storage,
-    `userimages/${currentUser.uid}/${imageName}`
-  );
-
-  imageRef.name = allImagesRef.name;
-  imageRef.fullPath = allImagesRef.fullPath;
+  const imageRef = ref(storage, `userimages/${currentUser.uid}`);
 
   const metaData = {
     cacheContol: "public,max-age=4000",
@@ -48,6 +39,7 @@ export async function uploadImage(image) {
 
   const uploadTask = await uploadBytes(imageRef, image, metaData);
   const downloadURL = await getDownloadURL(uploadTask.ref);
+  console.log(downloadURL);
 
   await updateProfile(currentUser, {
     photoURL: downloadURL,
