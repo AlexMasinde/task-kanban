@@ -4,6 +4,7 @@ import { useProjects } from "../../contexts/ProjectsContext";
 import { useTasks } from "../../contexts/TasksContext";
 
 import DeleteModal from "../DeleteModal/DeleteModal";
+import Navigation from "../Navigation/Navigation";
 import Sidebar from "../Sidebar/Sidebar";
 import TaskGroup from "../TaskGroup/TaskGroup";
 
@@ -19,6 +20,9 @@ export default function Dashboard() {
     <div className={DashBoardStyles.container}>
       <div className={DashBoardStyles.sidebar}>
         <Sidebar />
+      </div>
+      <div>
+        <Navigation />
       </div>
       <div className={DashBoardStyles.taskgroups}>
         {taskGroups.map((taskGroup) => {

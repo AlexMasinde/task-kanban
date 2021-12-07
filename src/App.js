@@ -10,6 +10,7 @@ import Signup from "./Components/Signup/Signup";
 import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 import AddProject from "./Components/AddProject/AddProject";
 import AddTask from "./Components/AddTask/AddTask";
+import UserProfile from "./Components/UserProfile/UserProfile";
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
               <Route path="signup" element={<Signup />} />
               <Route path="newproject" element={<AddProject />} />
               <Route path="addtask/:taskGroup" element={<AddTask />} />
+              <Route
+                path="/userprofile"
+                element={
+                  <PrivateRoute>
+                    <UserProfile />
+                  </PrivateRoute>
+                }
+              />
               <Route
                 path="/"
                 element={

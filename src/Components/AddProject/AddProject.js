@@ -23,7 +23,7 @@ import AddProjectStyles from "./AddProject.module.css";
 
 export default function Addproject() {
   const { currentUser } = useAuth();
-  const { editProject, dispatch } = useProjects();
+  const { editProject, projects, dispatch } = useProjects();
   const editing = editProject !== null;
 
   const [name, setName] = useState(editing ? editProject.name : "");
