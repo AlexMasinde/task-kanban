@@ -7,8 +7,22 @@
   height: 100vh;
 }
 
+.photo,
+.username,
+.email {
+  margin-bottom: 1.5em;
+}
+
 .photo {
   position: relative;
+  text-align: center;
+}
+
+.photo > img {
+  display: block;
+  height: 10em;
+  height: 10em;
+  border-radius: 0.6em;
 }
 
 .photo > label {
@@ -37,18 +51,59 @@
   height: 2em;
 }
 
+.username,
+.email {
+  border: 2px solid #ebeaed;
+  padding: 0.6em 1.2em;
+  border-radius: 0.6em;
+}
+
 .username {
   display: flex;
   align-items: center;
 }
 
+.username > img {
+  cursor: pointer;
+}
+
+.username > input,
+.email > p {
+  font-size: 1.6rem;
+  color: grey;
+}
+
 .username > input {
   outline: none;
+  margin-right: 1em;
   border: none;
+  padding-right: 1em;
+  border-right: 2px solid #ebeaed;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons > button {
   padding: 0.6rem 1.2rem;
   font-size: 1.6rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: grey;
-  margin-right: 1rem;
-  border-radius: 0.8rem;
+  border-radius: 0.6rem;
+  border: none;
+  background-color: #1c5a7c;
+  color: #ffffff;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.5s;
+}
+
+.buttons > button:hover {
+  color: #1c5a7c;
+  background-color: #ffffff;
+  border: 2px solid #ebeaed;
+}
+
+.buttons > button:first-child {
+  margin-bottom: 0.5em;
 }

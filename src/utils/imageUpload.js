@@ -5,14 +5,13 @@ import {
   uploadBytes,
 } from "@firebase/storage";
 import { updateProfile } from "@firebase/auth";
-import { v4 as uuidv4 } from "uuid";
 
 import { auth } from "../firebase";
 
 export function imageValidate(image) {
   const imageError = {};
 
-  const extensions = ["jpg", "jpeg", "png", "gif"];
+  const extensions = ["jpg", "jpeg", "png", "svg", "webp"];
   const imageName = image.name;
   const imageExtesion = imageName.substring(imageName.lastIndexOf(".") + 1);
   if (!extensions.includes(imageExtesion)) {
