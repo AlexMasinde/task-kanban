@@ -13,7 +13,7 @@ import DashBoardStyles from "./Dashboard.module.css";
 export default function Dashboard() {
   const { deleteTask } = useTasks();
   const { deleteProject } = useProjects();
-  const taskGroups = ["Pending", "Ongoing", "Completed"];
+  const taskGroups = ["Pending", "Ongoing", "Completed", "Delayed"];
 
   const openDeleteModal = deleteProject || deleteTask;
   return (
@@ -22,12 +22,14 @@ export default function Dashboard() {
         <Sidebar />
       </div>
       <div>
-        <Navigation />
-      </div>
-      <div className={DashBoardStyles.taskgroups}>
-        {taskGroups.map((taskGroup) => {
-          return <TaskGroup taskGroup={taskGroup} />;
-        })}
+        <div className={DashBoardStyles.content}>
+          <Navigation />
+        </div>
+        <div className={DashBoardStyles.taskgroups}>
+          {taskGroups.map((taskGroup) => {
+            return <TaskGroup taskGroup={taskGroup} />;
+          })}
+        </div>
       </div>
       {openDeleteModal && (
         <>

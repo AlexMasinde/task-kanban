@@ -1,9 +1,10 @@
 .container {
   max-width: 34.8em;
+  min-width: 34.8em;
 }
 
 .cardscontainer {
-  background: #f3f3f3;
+  background-color: #f3f3f3;
   padding: 1.6em 1em;
 }
 

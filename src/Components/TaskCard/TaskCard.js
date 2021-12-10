@@ -7,8 +7,8 @@ import { useProjects } from "../../contexts/ProjectsContext";
 import arrowright from "../../icons/arrowright.svg";
 import doc from "../../icons/doc.svg";
 import figma from "../../icons/figma.svg";
-import edittask from "../../icons/edittask.svg";
-import deleteicon from "../../icons/deleteicon.svg";
+import edittask from "../../icons/edit.svg";
+import deleteicon from "../../icons/delete.svg";
 
 import TaskCardStyles from "./TaskCard.module.css";
 

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router";
 
 import { useProjects } from "../../contexts/ProjectsContext";
 
-import edittask from "../../icons/edittask.svg";
-import deleteicon from "../../icons/deleteicon.svg";
+import editproject from "../../icons/edit.svg";
+import deleteicon from "../../icons/delete.svg";
 
 import ProjectListItemStyles from "./ProjectListItem.module.css";
 
@@ -61,7 +61,7 @@ export default function ProjectListItem({ project }) {
         <h3>{name}</h3>
         <div className={ProjectListItemStyles.icons}>
           <img onClick={deleteProject} src={deleteicon} alt="delete project" />
-          <img onClick={editProject} src={edittask} alt="edit project" />
+          <img onClick={editProject} src={editproject} alt="edit project" />
         </div>
       </div>
       <p className={ProjectListItemStyles.description}>{description}</p>

@@ -1,23 +1,18 @@
 .container {
   display: flex;
-  padding: 1em 2em;
+  margin: 2em 0;
   justify-content: flex-end;
   align-items: center;
-  border: 1px solid #000000;
 }
 
 .username > a {
   text-decoration: none;
   font-size: 1.6rem;
-  color: #000000;
+  color: #1c5a7c;
+  font-weight: bold;
   cursor: pointer;
   display: block;
   margin-right: 1.5rem;
-  transition: 0.7s;
-}
-
-.username > a:hover {
-  color: #cb9647;
 }
 
 .logout > button {
@@ -26,6 +21,15 @@
   border: none;
   border-radius: 0.6rem;
   font-size: 1.6rem;
-  background-color: #cb9647;
-  padding: 0.6rem 1.2rem;
+  background-color: #1c5a7c;
+  padding: 0.4rem 1rem;
+  border: 2px solid transparent;
+  transition: 0.5s;
+}
+
+.logout > button:hover {
+  color: #1c5a7c;
+  background-color: #ffffff;
+  border: 2px solid #ebeaed;
+  cursor: pointer;
 }

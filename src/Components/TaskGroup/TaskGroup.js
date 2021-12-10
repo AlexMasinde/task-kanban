@@ -27,10 +27,12 @@ export default function TaskGroup({ taskGroup }) {
 
   const backgroundColor =
     taskGroup === "Pending"
-      ? "#1C5A7C"
+      ? "#54117D"
       : taskGroup === "Ongoing"
       ? "#106354"
-      : "#54117D";
+      : taskGroup === "Completed"
+      ? "#71441B"
+      : "#6E6D6D";
 
   function handleDragOver(e) {
     e.preventDefault();
