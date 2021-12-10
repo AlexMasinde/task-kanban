@@ -9,19 +9,19 @@ import { updateProfile } from "@firebase/auth";
 import { auth } from "../firebase";
 
 export function imageValidate(image) {
-  const imageError = {};
+  let imageError = null;
 
   const extensions = ["jpg", "jpeg", "png", "svg", "webp"];
+
   const imageName = image.name;
+
   const imageExtesion = imageName.substring(imageName.lastIndexOf(".") + 1);
   if (!extensions.includes(imageExtesion)) {
-    imageError.extension = "Image is not valid";
+    imageError = "Image is not valid";
   }
+  console.log(imageError);
 
-  return {
-    valid: Object.keys(imageError).length === 0,
-    error: imageError,
-  };
+  return imageError;
 }
 
 //upload image to firebase
