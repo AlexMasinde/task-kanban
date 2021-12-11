@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Scrollbar } from "react-scrollbars-custom";
 
 import { useProjects } from "../../contexts/ProjectsContext";
 
@@ -27,32 +28,34 @@ export default function Sidebar() {
       <div className={SidebarStyles.addProject}>
         <button onClick={addProject}>Add Project</button>
       </div>
-      <div className={SidebarStyles.projects}>
-        {projectsLoading && (
-          <div className={SidebarStyles.loading}>
-            <p>Loading..</p>
-          </div>
-        )}
-        {!projectsLoading && projects.length === 0 && (
-          <div className={SidebarStyles.noprojects}>
-            <p>No Projects</p>
-          </div>
-        )}
-        {!projectsLoading && projects.length === 0 && (
-          <div className={SidebarStyles.error}>
-            <p>{projectsError}</p>
-          </div>
-        )}
-        {!projectsLoading &&
-          projects.length > 0 &&
-          projects.map((project) => {
-            return (
-              <div className={SidebarStyles.projectcontainer}>
-                <ProjectListItem project={project} />
-              </div>
-            );
-          })}
-      </div>
+      <Scrollbar style={{ width: "100%", height: `calc(100vh - 100px)` }}>
+        <div className={SidebarStyles.projects}>
+          {projectsLoading && (
+            <div className={SidebarStyles.loading}>
+              <p>Loading..</p>
+            </div>
+          )}
+          {!projectsLoading && projects.length === 0 && (
+            <div className={SidebarStyles.noprojects}>
+              <p>No Projects</p>
+            </div>
+          )}
+          {!projectsLoading && projects.length === 0 && (
+            <div className={SidebarStyles.error}>
+              <p>{projectsError}</p>
+            </div>
+          )}
+          {!projectsLoading &&
+            projects.length > 0 &&
+            projects.map((project) => {
+              return (
+                <div className={SidebarStyles.projectcontainer}>
+                  <ProjectListItem project={project} />
+                </div>
+              );
+            })}
+        </div>
+      </Scrollbar>
     </div>
   );
 }

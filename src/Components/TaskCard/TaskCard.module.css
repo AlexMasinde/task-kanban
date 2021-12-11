@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: space-between;
   z-index: 10;
+  margin-bottom: 2em;
 }
 
 .headericons {
@@ -87,9 +88,8 @@
 }
 
 .description > p {
-  font-size: 1.3rem;
-  line-height: 1.9rem;
-  color: #80878f;
+  font-size: 1.5rem;
+  line-height: 150%;
 }
 
 .document,

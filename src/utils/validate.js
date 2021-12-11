@@ -16,7 +16,26 @@ export function validateUserDetails(email, password) {
   };
 }
 
-export function validateProject(
+export function validateProject(name, description, selectedTags) {
+  const errors = {};
+  if (name.trim() === "") {
+    errors.name = "Name is required";
+  }
+  if (description.trim() === "") {
+    errors.description = "Description is required";
+  }
+
+  if (selectedTags.length === 0) {
+    errors.selectedTags = "Please select at least one tag";
+  }
+
+  return {
+    valid: Object.keys(errors) < 1,
+    errors,
+  };
+}
+
+export function validateTask(
   name,
   description,
   documentLink,

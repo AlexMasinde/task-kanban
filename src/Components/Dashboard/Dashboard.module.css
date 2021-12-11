@@ -21,3 +21,8 @@
 .taskgroups > div:not(:last-child) {
   margin-right: 3em;
 }
+
+.testdiv {
+  min-width: 1500px;
+  block-size: fit-content;
+}

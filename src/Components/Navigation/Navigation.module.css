@@ -3,6 +3,8 @@
   margin: 2em 0;
   justify-content: flex-end;
   align-items: center;
+  position: sticky;
+  top: 0;
 }
 
 .username > a {

@@ -23,18 +23,12 @@ import AddProjectStyles from "./AddProject.module.css";
 
 export default function Addproject() {
   const { currentUser } = useAuth();
-  const { editProject, projects, dispatch } = useProjects();
+  const { editProject, dispatch } = useProjects();
   const editing = editProject !== null;
 
   const [name, setName] = useState(editing ? editProject.name : "");
   const [description, setDescription] = useState(
     editing ? editProject.description : ""
-  );
-  const [documentLink, setDocumentLink] = useState(
-    editing ? editProject.documentLink : ""
-  );
-  const [designLink, setDesignLink] = useState(
-    editing ? editProject.designLink : ""
   );
   const [selectedTags, setSelectedTags] = useState(
     editing ? editProject.tags : []
@@ -60,31 +54,9 @@ export default function Addproject() {
     setDescription(description);
   }
 
-  function handleDocumentLink(e) {
-    if (errors.documentLink) {
-      setErrors({ ...errors, documentLink: "" });
-    }
-    const documentLink = e.target.value;
-    setDocumentLink(documentLink);
-  }
-
-  function handleDesignLink(e) {
-    if (errors.designLink) {
-      setErrors({ ...errors, designLink: "" });
-    }
-    const designLink = e.target.value;
-    setDesignLink(designLink);
-  }
-
   async function handleSubmit(e) {
     e.preventDefault();
-    const { valid, errors } = validateProject(
-      name,
-      description,
-      documentLink,
-      designLink,
-      selectedTags
-    );
+    const { valid, errors } = validateProject(name, description, selectedTags);
 
     if (!valid) {
       setErrors(errors);
@@ -105,14 +77,6 @@ export default function Addproject() {
           updatedProject.description = description;
         }
 
-        if (documentLink !== editProject.documentLink) {
-          updatedProject.documentLink = documentLink;
-        }
-
-        if (designLink !== editProject.designLink) {
-          updatedProject.designLink = designLink;
-        }
-
         if (!sameTags(selectedTags, editProject.tags)) {
           updatedProject.tags = selectedTags;
         }
@@ -126,8 +90,6 @@ export default function Addproject() {
         await addDoc(collection(database, "projects"), {
           name,
           description,
-          documentLink,
-          designLink,
           tags: selectedTags,
           user: currentUser.uid,
           createdAt: serverTimestamp(),
@@ -166,20 +128,6 @@ export default function Addproject() {
           ></textarea>
         </label>
         {errors.description && <p>{errors.description}</p>}
-        <label>
-          SRS Document Link
-          <input
-            value={documentLink}
-            onChange={handleDocumentLink}
-            type="text"
-          />
-        </label>
-        {errors.documentLink && <p>{errors.documentLink}</p>}
-        <label>
-          Design Link
-          <input value={designLink} onChange={handleDesignLink} type="text" />
-        </label>
-        {errors.designLink && <p>{errors.designLink}</p>}
         <div className={AddProjectStyles.tags}>
           <SelectCategories
             selectedTags={selectedTags}

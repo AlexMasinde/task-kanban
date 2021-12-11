@@ -1,4 +1,5 @@
 import React from "react";
+import { Scrollbar } from "react-scrollbars-custom";
 
 import { useProjects } from "../../contexts/ProjectsContext";
 import { useTasks } from "../../contexts/TasksContext";
@@ -21,15 +22,18 @@ export default function Dashboard() {
       <div className={DashBoardStyles.sidebar}>
         <Sidebar />
       </div>
-      <div>
+      <div className={DashBoardStyles.testdiv}>
         <div className={DashBoardStyles.content}>
           <Navigation />
         </div>
-        <div className={DashBoardStyles.taskgroups}>
-          {taskGroups.map((taskGroup) => {
-            return <TaskGroup taskGroup={taskGroup} />;
-          })}
-        </div>
+
+        <Scrollbar style={{ width: "100%", height: `calc(100vh - 100px)` }}>
+          <div className={DashBoardStyles.taskgroups}>
+            {taskGroups.map((taskGroup) => {
+              return <TaskGroup taskGroup={taskGroup} />;
+            })}
+          </div>
+        </Scrollbar>
       </div>
       {openDeleteModal && (
         <>
