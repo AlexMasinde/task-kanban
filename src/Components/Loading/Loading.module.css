@@ -1,0 +1,24 @@
+.loader {
+  display: inline-block;
+  width: 6em;
+  height: 6em;
+}
+.loader:after {
+  content: " ";
+  display: block;
+  width: 4em;
+  height: 4em;
+  margin: 0.8em;
+  border-radius: 50%;
+  border: 0.4em solid #1c5a7c;
+  border-color: #1c5a7c transparent #1c5a7c transparent;
+  animation: loaderanimation 1.2s linear infinite;
+}
+@keyframes loaderanimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

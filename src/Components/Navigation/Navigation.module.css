@@ -3,8 +3,7 @@
   margin: 2em 0;
   justify-content: flex-end;
   align-items: center;
-  position: sticky;
-  top: 0;
+  position: relative;
 }
 
 .username > a {
@@ -15,6 +14,11 @@
   cursor: pointer;
   display: block;
   margin-right: 1.5rem;
+}
+
+.username > a > p > span {
+  font-weight: normal;
+  font-style: italic;
 }
 
 .logout > button {
@@ -33,5 +37,31 @@
   color: #1c5a7c;
   background-color: #ffffff;
   border: 2px solid #ebeaed;
+  cursor: pointer;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  background-color: rgba(134, 146, 166, 0.1);
+  border-radius: 0.6em;
+  padding: 0.4em 1em;
+}
+
+.notification > p {
+  color: #8692a6;
+  font-size: 1.4rem;
+  font-style: italic;
+  padding-right: 0.5rem;
+  border-right: 2px solid #ebeaed;
+  color: #000000;
+}
+
+.notification > img {
+  width: 2em;
+  height: 2em;
+  display: block;
   cursor: pointer;
 }

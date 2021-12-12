@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useTasks } from "../../contexts/TasksContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
+import formatDate from "../../utils/formatDate";
+
 import arrowright from "../../icons/arrowright.svg";
 import doc from "../../icons/doc.svg";
 import figma from "../../icons/figma.svg";
@@ -18,8 +20,7 @@ export default function TaskCard({ task, taskGroup }) {
   const { name, description, createdAt, designLink, documentLink, tags } = task;
   const navigate = useNavigate();
 
-  const options = { day: "numeric", month: "short" };
-  const date = createdAt.toDate().toLocaleDateString("en-UK", options);
+  const date = formatDate(createdAt);
 
   function editTask() {
     setEditTask(task);
@@ -71,24 +72,28 @@ export default function TaskCard({ task, taskGroup }) {
       <div className={TaskCardStyles.description}>
         <p>{description}</p>
       </div>
-      <div className={TaskCardStyles.document}>
-        <img src={doc} alt="document icon" />
-        <a target="blank" href={`${documentLink}`}>
-          Document Link
-          <span>
-            <img src={arrowright} alt="document link" />
-          </span>
-        </a>
-      </div>
-      <div className={TaskCardStyles.design}>
-        <img src={figma} alt="figma icon" />
-        <a target="blank" href={`${designLink}`}>
-          Design Link
-          <span>
-            <img src={arrowright} alt="design link" />
-          </span>
-        </a>
-      </div>
+      {documentLink && (
+        <div className={TaskCardStyles.document}>
+          <img src={doc} alt="document icon" />
+          <a target="blank" href={`${documentLink}`}>
+            Document Link
+            <span>
+              <img src={arrowright} alt="document link" />
+            </span>
+          </a>
+        </div>
+      )}
+      {designLink && (
+        <div className={TaskCardStyles.design}>
+          <img src={figma} alt="figma icon" />
+          <a target="blank" href={`${designLink}`}>
+            Design Link
+            <span>
+              <img src={arrowright} alt="design link" />
+            </span>
+          </a>
+        </div>
+      )}
     </div>
   );
 }

@@ -13,17 +13,16 @@ import { database } from "../../firebase";
 import { useAuth } from "../../contexts/AuthContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
-import sameTags from "../../utils/compareTags";
-
 import { validateProject } from "../../utils/validate";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
 
 import AddProjectStyles from "./AddProject.module.css";
+import { projectToEdit } from "../../utils/projectOject";
 
 export default function Addproject() {
   const { currentUser } = useAuth();
-  const { editProject, dispatch } = useProjects();
+  const { editProject, dispatch, projects } = useProjects();
   const editing = editProject !== null;
 
   const [name, setName] = useState(editing ? editProject.name : "");
@@ -67,33 +66,39 @@ export default function Addproject() {
       setErrors({});
       setLoading(true);
       if (editing) {
-        const updatedProject = {};
-
-        if (name !== editProject.name) {
-          updatedProject.name = name;
-        }
-
-        if (description !== editProject.description) {
-          updatedProject.description = description;
-        }
-
-        if (!sameTags(selectedTags, editProject.tags)) {
-          updatedProject.tags = selectedTags;
-        }
-
+        const updatedProject = projectToEdit(
+          name,
+          description,
+          selectedTags,
+          editProject
+        );
         if (Object.keys(updatedProject).length > 0) {
           const updateRef = doc(database, "projects", editProject.id);
           await updateDoc(updateRef, updatedProject);
         }
+        const uneditedProjects = projects.filter(
+          (project) => project.id !== editProject.id
+        );
+        const editedProject = {
+          ...updatedProject,
+          user: currentUser.uid,
+          createdAt: Date.now(),
+        };
+        const newProjects = [editedProject, ...uneditedProjects];
+        dispatch({ type: "SET_PROJECTS", payload: newProjects });
         dispatch({ type: "SET_EDIT_PROJECT", payload: null });
       } else {
-        await addDoc(collection(database, "projects"), {
+        const newProject = {
           name,
           description,
           tags: selectedTags,
           user: currentUser.uid,
           createdAt: serverTimestamp(),
-        });
+        };
+        await addDoc(collection(database, "projects"), newProject);
+        const localProject = { ...newProject, createdAt: Date.now() };
+        const newProjects = [localProject, ...projects];
+        dispatch({ type: "SET_PROJECTS", payload: newProjects });
       }
 
       setLoading(false);

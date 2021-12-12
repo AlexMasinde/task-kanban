@@ -8,12 +8,13 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import Navigation from "../Navigation/Navigation";
 import Sidebar from "../Sidebar/Sidebar";
 import TaskGroup from "../TaskGroup/TaskGroup";
+import SelectProject from "../SelectProject/SelectProject";
 
 import DashBoardStyles from "./Dashboard.module.css";
 
 export default function Dashboard() {
   const { deleteTask } = useTasks();
-  const { deleteProject } = useProjects();
+  const { deleteProject, selectedProject, projectsError } = useProjects();
   const taskGroups = ["Pending", "Ongoing", "Completed", "Delayed"];
 
   const openDeleteModal = deleteProject || deleteTask;
@@ -27,13 +28,20 @@ export default function Dashboard() {
           <Navigation />
         </div>
 
-        <Scrollbar style={{ width: "100%", height: `calc(100vh - 100px)` }}>
-          <div className={DashBoardStyles.taskgroups}>
-            {taskGroups.map((taskGroup) => {
-              return <TaskGroup taskGroup={taskGroup} />;
-            })}
+        {selectedProject && (
+          <Scrollbar style={{ width: "100%", height: `calc(100vh - 100px)` }}>
+            <div className={DashBoardStyles.taskgroups}>
+              {taskGroups.map((taskGroup) => {
+                return <TaskGroup taskGroup={taskGroup} />;
+              })}
+            </div>
+          </Scrollbar>
+        )}
+        {!selectedProject && !projectsError && (
+          <div className={DashBoardStyles.selectproject}>
+            <SelectProject />
           </div>
-        </Scrollbar>
+        )}
       </div>
       {openDeleteModal && (
         <>

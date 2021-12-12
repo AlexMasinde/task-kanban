@@ -5,6 +5,7 @@ import { doc, updateDoc } from "@firebase/firestore";
 import { database } from "../../firebase";
 
 import { useTasks } from "../../contexts/TasksContext";
+import { useProjects } from "../../contexts/ProjectsContext";
 
 import TaskCard from "../TaskCard/TaskCard";
 
@@ -14,11 +15,14 @@ import TaskGroupStyles from "./TaskGroup.module.css";
 
 export default function TaskGroup({ taskGroup }) {
   const { tasks, setEditTask, setTasks } = useTasks();
+  const { selectedProject } = useProjects();
   const [draggingOver, setDraggingOver] = useState(false);
   const [taskUpdateError, setTaskUpdateError] = useState(null);
   const navigate = useNavigate();
 
-  const taskGroupTasks = tasks.filter((task) => task.status === taskGroup);
+  const taskGroupTasks = tasks.filter(
+    (task) => task.status === taskGroup && task.projectId === selectedProject.id
+  );
 
   function addTask() {
     setEditTask(null);

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createContext, useContext, useReducer } from "react";
 
-import { collection, query, getDocs, where } from "firebase/firestore";
+import { collection, query, getDocs, where, orderBy } from "firebase/firestore";
 
 import { database } from "../firebase";
 
@@ -52,7 +52,8 @@ export function ProjectsProvider({ children }) {
         dispatch({ type: "SET_PROJECTS_ERROR", payload: null });
         const projectsQuery = query(
           collection(database, "projects"),
-          where("user", "==", currentUser.uid)
+          where("user", "==", currentUser.uid),
+          orderBy("createdAt", "desc")
         );
         const dataSnapshot = await getDocs(projectsQuery);
         const projectsData = dataSnapshot.docs.map((doc) => {
@@ -61,6 +62,7 @@ export function ProjectsProvider({ children }) {
         dispatch({ type: "SET_PROJECTS", payload: projectsData });
         dispatch({ type: "SET_PROJECTS_LOADING", payload: false });
       } catch (err) {
+        console.log(err);
         dispatch({ type: "SET_PROJECTS_LOADING", payload: false });
         dispatch({
           type: "SET_PROJECTS_ERROR",

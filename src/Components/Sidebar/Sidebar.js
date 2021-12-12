@@ -4,6 +4,7 @@ import { Scrollbar } from "react-scrollbars-custom";
 
 import { useProjects } from "../../contexts/ProjectsContext";
 
+import Loading from "../Loading/Loading";
 import ProjectListItem from "../ProjectListItem/ProjectListItem";
 
 import SidebarStyles from "./Sidebar.module.css";
@@ -32,15 +33,15 @@ export default function Sidebar() {
         <div className={SidebarStyles.projects}>
           {projectsLoading && (
             <div className={SidebarStyles.loading}>
-              <p>Loading..</p>
+              <Loading />
             </div>
           )}
-          {!projectsLoading && projects.length === 0 && (
+          {!projectsLoading && projects.length === 0 && !projectsError && (
             <div className={SidebarStyles.noprojects}>
               <p>No Projects</p>
             </div>
           )}
-          {!projectsLoading && projects.length === 0 && (
+          {projectsError && (
             <div className={SidebarStyles.error}>
               <p>{projectsError}</p>
             </div>
