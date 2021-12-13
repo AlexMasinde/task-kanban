@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
 } from "@firebase/firestore";
+import { captureException } from "@sentry/react";
 
 import { database } from "../../firebase";
 
@@ -35,6 +36,7 @@ export default function Addproject() {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [writeError, setWriteError] = useState(null);
   const navigate = useNavigate();
 
   function handleName(e) {
@@ -105,7 +107,8 @@ export default function Addproject() {
       navigate("/");
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      setWriteError("Could not Create Project! Please try again.");
+      captureException(err);
     }
   }
 
@@ -152,6 +155,7 @@ export default function Addproject() {
           </button>
           <p onClick={close}>Close</p>
         </div>
+        {writeError && <p>{writeError}</p>}
       </form>
     </div>
   );

@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
 } from "@firebase/firestore";
+import { captureException } from "@sentry/react";
 
 import { database } from "../../firebase";
 
@@ -45,6 +46,7 @@ export default function AddTask() {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [writeError, setWriteError] = useState(null);
   const { taskGroup } = useParams();
   const navigate = useNavigate();
 
@@ -149,7 +151,8 @@ export default function AddTask() {
       navigate("/");
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      setWriteError("Could not add task. Please try again.");
+      captureException(err);
     }
   }
 
@@ -211,6 +214,7 @@ export default function AddTask() {
           </button>
           <p onClick={close}>Close</p>
         </div>
+        {writeError && <p>{writeError}</p>}
       </form>
     </div>
   );

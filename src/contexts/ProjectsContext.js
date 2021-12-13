@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
+import { captureException } from "@sentry/react";
 
 import { collection, query, getDocs, where, orderBy } from "firebase/firestore";
 
@@ -62,7 +62,7 @@ export function ProjectsProvider({ children }) {
         dispatch({ type: "SET_PROJECTS", payload: projectsData });
         dispatch({ type: "SET_PROJECTS_LOADING", payload: false });
       } catch (err) {
-        console.log(err);
+        captureException(err);
         dispatch({ type: "SET_PROJECTS_LOADING", payload: false });
         dispatch({
           type: "SET_PROJECTS_ERROR",
@@ -80,7 +80,6 @@ export function ProjectsProvider({ children }) {
 
   return (
     <ProjectsContext.Provider value={value}>
-      {console.log(state.editProject)}
       {children}
     </ProjectsContext.Provider>
   );

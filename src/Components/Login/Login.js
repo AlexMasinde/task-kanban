@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { captureException } from "@sentry/react";
 
 import { useAuth } from "../../contexts/AuthContext";
 
 import { validateUserDetails } from "../../utils/validate";
+import { googleProviderErrors, emailLoginErrors } from "../../utils/authErrors";
 
 import Input from "../Input/Input";
 import Button from "../Button/Button";
@@ -54,13 +56,8 @@ export default function Login() {
       setLoading(false);
       navigate("/");
     } catch (err) {
-      console.log(err);
-      if (err.code === "auth/user-not-found") {
-        setErrors({ ...errors, auth: "User not found" });
-      }
-      if (err.code === "auth/wrong-password") {
-        setErrors({ ...errors, auth: "Wrong password" });
-      }
+      const loginError = emailLoginErrors(err, errors, captureException);
+      setErrors(loginError);
       setLoading(false);
     }
   }
@@ -75,8 +72,14 @@ export default function Login() {
       setLoading(false);
       navigate("/");
     } catch (err) {
-      console.log(err);
       setLoading(false);
+      const providerErrors = googleProviderErrors(
+        err,
+        errors,
+        captureException
+      );
+
+      setErrors(providerErrors);
     }
   }
 

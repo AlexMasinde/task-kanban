@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { deleteDoc, doc } from "@firebase/firestore";
+import { captureException } from "@sentry/react";
 
 import { database } from "../../firebase";
 
@@ -45,7 +46,7 @@ export default function DeleteModal() {
     } catch (err) {
       setError("Could not delete");
       setLoading(false);
-      console.log(err);
+      captureException(err);
     }
   }
 

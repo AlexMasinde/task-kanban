@@ -10,12 +10,12 @@ import closeicon from "../../icons/closeicongrey.svg";
 import NavigationStyles from "./Navigation.module.css";
 
 export default function Navigation() {
-  const { currentUser } = useAuth();
+  const { currentUser, userSingOut } = useAuth();
   const { notification, setNotification } = useTasks();
   const { projectsError } = useProjects();
 
-  function handleLogout() {
-    console.log("loging out");
+  async function handleLogout() {
+    await userSingOut();
   }
 
   function closeNotification() {

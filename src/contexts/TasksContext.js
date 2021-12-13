@@ -6,6 +6,7 @@ import {
   where,
   orderBy,
 } from "@firebase/firestore";
+import { captureException } from "@sentry/react";
 
 import { database } from "../firebase";
 
@@ -45,7 +46,7 @@ export function TasksProvider({ children }) {
         setTasks(tasks);
         setTasksLoading(false);
       } catch (err) {
-        console.log(err);
+        captureException(err);
         setTasksError("Could not load tasks");
         setTasksLoading(false);
       }

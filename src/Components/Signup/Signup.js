@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { captureException } from "@sentry/react";
 
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -13,6 +14,7 @@ import Button from "../Button/Button";
 import WithGoogle from "../WithGoogle/WithGoogle";
 
 import SignupStyles from "./Signup.module.css";
+import { googleProviderErrors } from "../../utils/authErrors";
 
 export default function Singup() {
   const { userSignup, googleSignin } = useAuth();
@@ -50,10 +52,8 @@ export default function Singup() {
       navigate("/");
       setLoading(false);
     } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
-        setErrors({ auth: "Email salready in use" });
-      }
-      console.log(err);
+      const emailSignupError = emailSignupError(err, errors, captureException);
+      setErrors(emailSignupError);
       setLoading(false);
     }
   }
@@ -68,7 +68,12 @@ export default function Singup() {
       setLoading(false);
       navigate("/");
     } catch (err) {
-      console.log(err);
+      const googleProviderError = googleProviderErrors(
+        err,
+        errors,
+        captureException
+      );
+      setErrors(googleProviderError);
       setLoading(false);
     }
   }
