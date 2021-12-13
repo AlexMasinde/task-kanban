@@ -11,6 +11,8 @@ import {
 
 import { auth } from "../firebase";
 
+import Loading from "../Components/Loading/Loading";
+
 const AuthContext = createContext();
 
 export function useAuth() {
@@ -63,7 +65,11 @@ export function AuthProvider({ children }) {
 
   return (
     <>
-      {loading && <div>Loading</div>}
+      {loading && (
+        <div className="loader">
+          <Loading />
+        </div>
+      )}
       {!loading && (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
       )}

@@ -1,9 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "@firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+} from "@firebase/firestore";
+import { captureException } from "@sentry/react";
 
 import { database } from "../firebase";
 
-import { useProjects } from "./ProjectsContext";
+import { useAuth } from "./AuthContext";
 
 const TasksContext = createContext();
 
@@ -17,17 +24,20 @@ export function TasksProvider({ children }) {
   const [editTask, setEditTask] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [deleteTask, setDeleteTask] = useState(null);
-  const { selectedProject } = useProjects();
+  const [notification, setNotification] = useState(true);
+
+  const { currentUser } = useAuth();
 
   useEffect(() => {
-    if (!selectedProject) return;
+    if (!currentUser) return;
     async function fetchTasks() {
       try {
         setTasksError(null);
         setTasksLoading(true);
         const tasksQuery = query(
           collection(database, "tasks"),
-          where("projectId", "==", selectedProject.id)
+          where("user", "==", currentUser.uid),
+          orderBy("createdAt", "desc")
         );
         const tasksData = await getDocs(tasksQuery);
         const tasks = tasksData.docs.map((doc) => {
@@ -36,13 +46,13 @@ export function TasksProvider({ children }) {
         setTasks(tasks);
         setTasksLoading(false);
       } catch (err) {
-        console.log(err);
+        captureException(err);
         setTasksError("Could not load tasks");
         setTasksLoading(false);
       }
     }
     fetchTasks();
-  }, [selectedProject]);
+  }, [currentUser]);
 
   const value = {
     tasks,
@@ -50,6 +60,8 @@ export function TasksProvider({ children }) {
     tasksError,
     editTask,
     deleteTask,
+    notification,
+    setNotification,
     setDeleteTask,
     setEditTask,
     setTasks,

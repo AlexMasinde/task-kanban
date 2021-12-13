@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useTasks } from "../../contexts/TasksContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
+import { formatTaskDate } from "../../utils/formatDate";
+
 import arrowright from "../../icons/arrowright.svg";
 import doc from "../../icons/doc.svg";
 import figma from "../../icons/figma.svg";
-import edittask from "../../icons/edittask.svg";
-import deleteicon from "../../icons/deleteicon.svg";
+import edittask from "../../icons/edit.svg";
+import deleteicon from "../../icons/delete.svg";
 
 import TaskCardStyles from "./TaskCard.module.css";
 
@@ -16,10 +18,10 @@ export default function TaskCard({ task, taskGroup }) {
   const { setEditTask, setDeleteTask } = useTasks();
   const { deleteProject, dispatch } = useProjects();
   const { name, description, createdAt, designLink, documentLink, tags } = task;
+  const nameToDisplay = name.length > 25 ? `${name.substring(0, 25)}...` : name;
   const navigate = useNavigate();
 
-  const options = { day: "numeric", month: "short" };
-  const date = createdAt.toDate().toLocaleDateString("en-UK", options);
+  const date = formatTaskDate(createdAt);
 
   function editTask() {
     setEditTask(task);
@@ -65,30 +67,34 @@ export default function TaskCard({ task, taskGroup }) {
         </div>
       </div>
       <div className={TaskCardStyles.name}>
-        <p>{name}</p>
+        <p>{nameToDisplay}</p>
         <p>{date}</p>
       </div>
       <div className={TaskCardStyles.description}>
         <p>{description}</p>
       </div>
-      <div className={TaskCardStyles.document}>
-        <img src={doc} alt="document icon" />
-        <a target="blank" href={`${documentLink}`}>
-          Document Link
-          <span>
-            <img src={arrowright} alt="document link" />
-          </span>
-        </a>
-      </div>
-      <div className={TaskCardStyles.design}>
-        <img src={figma} alt="figma icon" />
-        <a target="blank" href={`${designLink}`}>
-          Design Link
-          <span>
-            <img src={arrowright} alt="design link" />
-          </span>
-        </a>
-      </div>
+      {documentLink && (
+        <div className={TaskCardStyles.document}>
+          <img src={doc} alt="document icon" />
+          <a target="blank" href={`${documentLink}`}>
+            Document Link
+            <span>
+              <img src={arrowright} alt="document link" />
+            </span>
+          </a>
+        </div>
+      )}
+      {designLink && (
+        <div className={TaskCardStyles.design}>
+          <img src={figma} alt="figma icon" />
+          <a target="blank" href={`${designLink}`}>
+            Design Link
+            <span>
+              <img src={arrowright} alt="design link" />
+            </span>
+          </a>
+        </div>
+      )}
     </div>
   );
 }

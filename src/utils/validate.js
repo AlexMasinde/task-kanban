@@ -16,13 +16,7 @@ export function validateUserDetails(email, password) {
   };
 }
 
-export function validateProject(
-  name,
-  description,
-  documentLink,
-  designLink,
-  selectedTags
-) {
+export function validateProject(name, description, selectedTags) {
   const errors = {};
   if (name.trim() === "") {
     errors.name = "Name is required";
@@ -30,12 +24,42 @@ export function validateProject(
   if (description.trim() === "") {
     errors.description = "Description is required";
   }
-  if (!isURL(documentLink)) {
+
+  if (selectedTags.length === 0) {
+    errors.selectedTags = "Please select at least one tag";
+  }
+
+  return {
+    valid: Object.keys(errors) < 1,
+    errors,
+  };
+}
+
+export function validateTask(
+  name,
+  description,
+  documentLink,
+  designLink,
+  selectedTags
+) {
+  const errors = {};
+
+  if (name.trim() === "") {
+    errors.name = "Name is required";
+  }
+
+  if (description.trim() === "") {
+    errors.description = "Description is required";
+  }
+
+  if (documentLink && !isURL(documentLink)) {
     errors.documentLink = "Please provide a valid document URL";
   }
-  if (!isURL(designLink)) {
+
+  if (designLink && !isURL(designLink)) {
     errors.designLink = "Please provide a valid design URL";
   }
+
   if (selectedTags.length === 0) {
     errors.selectedTags = "Please select at least one tag";
   }

@@ -1,15 +1,16 @@
 .container {
   position: relative;
-  max-height: 3.1em;
 }
+
 .dropdown {
   display: flex;
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 0.6em 1.2em;
-  border-radius: 0.4em;
+  border: 1px solid #8692a6;
+  padding: 2em 1.2em;
+  border-radius: 0.6em;
   margin-top: 1em;
   justify-content: space-between;
+  border: 1px solid #8692a6;
 }
 
 .tags {
@@ -17,7 +18,9 @@
 }
 
 .tags > p {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  color: #696f79;
+  min-height: 2rem;
 }
 
 .tags > div:not(:first-child) {
@@ -25,7 +28,7 @@
 }
 
 .listitem {
-  font-size: 2rem;
+  font-size: 1.6rem;
   cursor: pointer;
 }
 
@@ -45,7 +48,7 @@
 
 .list {
   z-index: 1000;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid #8692a6;
   border-radius: 0.4em;
   position: absolute;
   top: 100%;

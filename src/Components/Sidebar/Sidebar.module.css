@@ -1,20 +1,30 @@
 .container {
-  max-width: 25em;
-  padding: 2em;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  /* min-height: 100vh; */
+  max-width: 34.8em;
+  min-width: 34.8em;
+  min-height: 100vh;
+  max-height: 100vh;
+  margin-right: 3em;
+  padding: 0 1em;
+  background-color: #f3f3f3;
+  /* overflow-y: auto;
+  scroll-behavior: smooth; */
 }
 
 .addProject {
-  margin-bottom: 2em;
-  padding: 0;
+  padding: 2em 1em;
   width: 100%;
+  background-color: #f3f3f3;
+  z-index: 2000;
+  position: sticky;
+  top: 0;
 }
+
 .addProject > button {
   border-radius: 0.6rem;
   font-size: 1.4rem;
+  font-weight: 700;
   border: none;
-  background-color: #cb9647;
+  background-color: #1c5a7c;
   color: #ffffff;
   padding: 0.6rem 1.2rem;
   width: 100%;
@@ -43,10 +53,14 @@
 }
 
 .error > p {
-  color: red;
+  color: #8692a6;
 }
 
-.projectcontainer {
+.projects {
+  margin: 0 1em;
+}
+
+.projects > div:not(:last-child) {
   margin-bottom: 2em;
 }
 

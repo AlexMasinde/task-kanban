@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.container > p {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #8692a6;
+  margin-left: 1rem;
+}
+
+.container > img {
+  display: block;
+  width: 4em;
+  height: 4em;
+}

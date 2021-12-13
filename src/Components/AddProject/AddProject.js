@@ -7,34 +7,29 @@ import {
   doc,
   updateDoc,
 } from "@firebase/firestore";
+import { captureException } from "@sentry/react";
 
 import { database } from "../../firebase";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
-import sameTags from "../../utils/compareTags";
-
 import { validateProject } from "../../utils/validate";
+import { categories } from "../../utils/categories";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
 
 import AddProjectStyles from "./AddProject.module.css";
+import { projectToEdit } from "../../utils/projectOject";
 
 export default function Addproject() {
   const { currentUser } = useAuth();
-  const { editProject, dispatch } = useProjects();
+  const { editProject, dispatch, projects } = useProjects();
   const editing = editProject !== null;
 
   const [name, setName] = useState(editing ? editProject.name : "");
   const [description, setDescription] = useState(
     editing ? editProject.description : ""
-  );
-  const [documentLink, setDocumentLink] = useState(
-    editing ? editProject.documentLink : ""
-  );
-  const [designLink, setDesignLink] = useState(
-    editing ? editProject.designLink : ""
   );
   const [selectedTags, setSelectedTags] = useState(
     editing ? editProject.tags : []
@@ -42,6 +37,7 @@ export default function Addproject() {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [writeError, setWriteError] = useState(null);
   const navigate = useNavigate();
 
   function handleName(e) {
@@ -60,31 +56,9 @@ export default function Addproject() {
     setDescription(description);
   }
 
-  function handleDocumentLink(e) {
-    if (errors.documentLink) {
-      setErrors({ ...errors, documentLink: "" });
-    }
-    const documentLink = e.target.value;
-    setDocumentLink(documentLink);
-  }
-
-  function handleDesignLink(e) {
-    if (errors.designLink) {
-      setErrors({ ...errors, designLink: "" });
-    }
-    const designLink = e.target.value;
-    setDesignLink(designLink);
-  }
-
   async function handleSubmit(e) {
     e.preventDefault();
-    const { valid, errors } = validateProject(
-      name,
-      description,
-      documentLink,
-      designLink,
-      selectedTags
-    );
+    const { valid, errors } = validateProject(name, description, selectedTags);
 
     if (!valid) {
       setErrors(errors);
@@ -95,50 +69,47 @@ export default function Addproject() {
       setErrors({});
       setLoading(true);
       if (editing) {
-        const updatedProject = {};
-
-        if (name !== editProject.name) {
-          updatedProject.name = name;
-        }
-
-        if (description !== editProject.description) {
-          updatedProject.description = description;
-        }
-
-        if (documentLink !== editProject.documentLink) {
-          updatedProject.documentLink = documentLink;
-        }
-
-        if (designLink !== editProject.designLink) {
-          updatedProject.designLink = designLink;
-        }
-
-        if (!sameTags(selectedTags, editProject.tags)) {
-          updatedProject.tags = selectedTags;
-        }
-
+        const updatedProject = projectToEdit(
+          name,
+          description,
+          selectedTags,
+          editProject
+        );
         if (Object.keys(updatedProject).length > 0) {
           const updateRef = doc(database, "projects", editProject.id);
           await updateDoc(updateRef, updatedProject);
         }
+        const uneditedProjects = projects.filter(
+          (project) => project.id !== editProject.id
+        );
+        const editedProject = {
+          ...updatedProject,
+          user: currentUser.uid,
+          createdAt: Date.now(),
+        };
+        const newProjects = [editedProject, ...uneditedProjects];
+        dispatch({ type: "SET_PROJECTS", payload: newProjects });
         dispatch({ type: "SET_EDIT_PROJECT", payload: null });
       } else {
-        await addDoc(collection(database, "projects"), {
+        const newProject = {
           name,
           description,
-          documentLink,
-          designLink,
           tags: selectedTags,
           user: currentUser.uid,
           createdAt: serverTimestamp(),
-        });
+        };
+        await addDoc(collection(database, "projects"), newProject);
+        const localProject = { ...newProject, createdAt: Date.now() };
+        const newProjects = [localProject, ...projects];
+        dispatch({ type: "SET_PROJECTS", payload: newProjects });
       }
 
       setLoading(false);
       navigate("/");
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      setWriteError("Could not Create Project! Please try again.");
+      captureException(err);
     }
   }
 
@@ -166,24 +137,11 @@ export default function Addproject() {
           ></textarea>
         </label>
         {errors.description && <p>{errors.description}</p>}
-        <label>
-          SRS Document Link
-          <input
-            value={documentLink}
-            onChange={handleDocumentLink}
-            type="text"
-          />
-        </label>
-        {errors.documentLink && <p>{errors.documentLink}</p>}
-        <label>
-          Design Link
-          <input value={designLink} onChange={handleDesignLink} type="text" />
-        </label>
-        {errors.designLink && <p>{errors.designLink}</p>}
         <div className={AddProjectStyles.tags}>
           <SelectCategories
             selectedTags={selectedTags}
             setSelectedTags={setSelectedTags}
+            tags={categories}
           />
         </div>
         {errors.selectedTags && selectedTags.length === 0 && (
@@ -199,6 +157,7 @@ export default function Addproject() {
           </button>
           <p onClick={close}>Close</p>
         </div>
+        {writeError && <p>{writeError}</p>}
       </form>
     </div>
   );

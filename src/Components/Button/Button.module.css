@@ -1,20 +1,24 @@
 .container > button {
-  background-color: #615ef0;
-  text-align: center;
-  border-radius: 1rem;
+  border-radius: 0.6rem;
   font-size: 2rem;
-  line-height: 2.4rem;
+  font-weight: bold;
   border: none;
-  width: 100%;
-  padding: 1.8rem 0;
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  transition: 0.5s;
+  background-color: #1c5a7c;
   color: #ffffff;
+  border: 2px solid transparent;
+  color: #ffffff;
+  width: 100%;
 }
 
 .container > button:hover {
-  cursor: pointer;
+  border: 2px solid #ebeaed;
+  background-color: #ffffff;
+  color: #1c5a7c;
 }
 
 .loading {
-  border: 1px solid rgba(28, 28, 28, 0.1);
-  color: rgba(28, 28, 28, 0.1);
+  opacity: 0.4;
 }

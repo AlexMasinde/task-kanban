@@ -4,18 +4,19 @@
   align-items: center;
   justify-content: center;
   padding: 1.8em 0;
-  border: 1px solid #000000;
-  border-radius: 1em;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 0.6em;
 }
 
 .container > img {
-  width: 3em;
-  height: 3em;
+  width: 2.4em;
+  height: 2.4em;
 }
 
 .container > p {
-  font-size: 2rem;
+  font-size: 1.6rem;
   margin-left: 1rem;
+  font-weight: 700;
 }
 
 .loading {

@@ -12,7 +12,6 @@ export default function Input({
 }) {
   return (
     <div className={InputStyles.container}>
-      <img src={icon} alt={alt} />
       <input
         placeholder={placeholder}
         type={type}

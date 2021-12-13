@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
 } from "@firebase/firestore";
+import { captureException } from "@sentry/react";
 
 import { database } from "../../firebase";
 
@@ -14,14 +15,16 @@ import { useTasks } from "../../contexts/TasksContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
-import { validateProject } from "../../utils/validate";
+import { validateTask } from "../../utils/validate";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
 
 import AddTaskStyles from "./AddTask.module.css";
-import sameTags from "../../utils/compareTags";
+
+import { taskToAdd, taskToEdit } from "../../utils/taskObject";
 
 export default function AddTask() {
+  const { tasks, setTasks } = useTasks();
   const { currentUser } = useAuth();
   const { selectedProject } = useProjects();
   const { editTask, setEditTask } = useTasks();
@@ -43,6 +46,7 @@ export default function AddTask() {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [writeError, setWriteError] = useState(null);
   const { taskGroup } = useParams();
   const navigate = useNavigate();
 
@@ -80,7 +84,8 @@ export default function AddTask() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const { valid, errors } = validateProject(
+
+    const { valid, errors } = validateTask(
       name,
       description,
       documentLink,
@@ -98,53 +103,56 @@ export default function AddTask() {
       setLoading(true);
 
       if (editing) {
-        const updatedTask = {};
-
-        if (name !== editTask.name) {
-          updatedTask.name = name;
-        }
-
-        if (description !== editTask.description) {
-          updatedTask.description = description;
-        }
-
-        if (documentLink !== editTask.documentLink) {
-          updatedTask.documentLink = documentLink;
-        }
-
-        if (designLink !== editTask.designLink) {
-          updatedTask.designLink = designLink;
-        }
-
-        if (!sameTags(selectedTags, editTask.tags)) {
-          updatedTask.tags = selectedTags;
-        }
+        const updatedTask = taskToEdit(
+          name,
+          description,
+          documentLink,
+          designLink,
+          selectedTags,
+          editTask
+        );
 
         if (Object.keys(updatedTask).length > 0) {
           const updateTaskRef = doc(database, "tasks", editTask.id);
           await updateDoc(updateTaskRef, updatedTask);
         }
-
+        const uneditedTasks = tasks.filter((task) => task.id !== editTask.id);
+        const editedTask = {
+          ...updatedTask,
+          user: currentUser.uid,
+          project: selectedProject.id,
+          status: taskGroup,
+          createdAt: Date.now(),
+        };
+        setTasks([editedTask, ...uneditedTasks]);
         setEditTask(null);
       } else {
-        await addDoc(collection(database, "tasks"), {
+        const taskInput = taskToAdd(
           name,
           description,
           documentLink,
           designLink,
-          status: taskGroup,
-          tags: selectedTags,
-          projectId: selectedProject.id,
-          user: currentUser.uid,
+          selectedTags
+        );
+
+        const newTask = {
+          ...taskInput,
           createdAt: serverTimestamp(),
-        });
+          user: currentUser.uid,
+          projectId: selectedProject.id,
+          status: taskGroup,
+        };
+        await addDoc(collection(database, "tasks"), { ...newTask });
+        const localTask = { ...newTask, createdAt: Date.now() };
+        setTasks([localTask, ...tasks]);
       }
 
       setLoading(false);
       navigate("/");
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      setWriteError("Could not add task. Please try again.");
+      captureException(err);
     }
   }
 
@@ -206,6 +214,7 @@ export default function AddTask() {
           </button>
           <p onClick={close}>Close</p>
         </div>
+        {writeError && <p>{writeError}</p>}
       </form>
     </div>
   );

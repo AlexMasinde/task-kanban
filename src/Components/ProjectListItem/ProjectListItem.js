@@ -3,26 +3,20 @@ import { useNavigate } from "react-router";
 
 import { useProjects } from "../../contexts/ProjectsContext";
 
-import edittask from "../../icons/edittask.svg";
-import deleteicon from "../../icons/deleteicon.svg";
+import { formatProjectDateTime } from "../../utils/formatDate";
+
+import editproject from "../../icons/edit.svg";
+import deleteicon from "../../icons/delete.svg";
 
 import ProjectListItemStyles from "./ProjectListItem.module.css";
 
 export default function ProjectListItem({ project }) {
   const { dispatch, selectedProject } = useProjects();
   const { createdAt, description, name } = project;
+  const nameToDisplay = name.length > 25 ? `${name.substring(0, 25)}...` : name;
   const navigate = useNavigate();
 
-  const transformedDate = createdAt.toDate();
-  const dayDateOptions = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    weekday: "long",
-  };
-  const timeOptions = { hour: "numeric", minute: "numeric" };
-  const dayDate = transformedDate.toLocaleDateString("en-UK", dayDateOptions);
-  const time = transformedDate.toLocaleTimeString("en-UK", timeOptions);
+  const { dayDate, time } = formatProjectDateTime(createdAt);
 
   function setSelectedProject() {
     dispatch({
@@ -58,10 +52,10 @@ export default function ProjectListItem({ project }) {
       }
     >
       <div className={ProjectListItemStyles.header}>
-        <h3>{name}</h3>
+        <h3>{nameToDisplay}</h3>
         <div className={ProjectListItemStyles.icons}>
           <img onClick={deleteProject} src={deleteicon} alt="delete project" />
-          <img onClick={editProject} src={edittask} alt="edit project" />
+          <img onClick={editProject} src={editproject} alt="edit project" />
         </div>
       </div>
       <p className={ProjectListItemStyles.description}>{description}</p>

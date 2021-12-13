@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  margin: 2em 0;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.username > a {
+  text-decoration: none;
+  font-size: 1.6rem;
+  color: #1c5a7c;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin-right: 1.5rem;
+}
+
+.username > a > p > span {
+  font-weight: normal;
+  font-style: italic;
+}
+
+.logout > button {
+  border: none;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 1.6rem;
+  background-color: #1c5a7c;
+  padding: 0.4rem 1rem;
+  border: 2px solid transparent;
+  transition: 0.5s;
+}
+
+.logout > button:hover {
+  color: #1c5a7c;
+  background-color: #ffffff;
+  border: 2px solid #ebeaed;
+  cursor: pointer;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  background-color: rgba(134, 146, 166, 0.1);
+  border-radius: 0.6em;
+  padding: 0.4em 1em;
+}
+
+.notification > p {
+  color: #8692a6;
+  font-size: 1.4rem;
+  font-style: italic;
+  padding-right: 0.5rem;
+  border-right: 2px solid #ebeaed;
+  color: #000000;
+}
+
+.notification > img {
+  width: 2em;
+  height: 2em;
+  display: block;
+  cursor: pointer;
+}
