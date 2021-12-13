@@ -13,6 +13,7 @@ import ProjectListItemStyles from "./ProjectListItem.module.css";
 export default function ProjectListItem({ project }) {
   const { dispatch, selectedProject } = useProjects();
   const { createdAt, description, name } = project;
+  const nameToDisplay = name.length > 25 ? `${name.substring(0, 25)}...` : name;
   const navigate = useNavigate();
 
   const { dayDate, time } = formatProjectDateTime(createdAt);
@@ -51,7 +52,7 @@ export default function ProjectListItem({ project }) {
       }
     >
       <div className={ProjectListItemStyles.header}>
-        <h3>{name}</h3>
+        <h3>{nameToDisplay}</h3>
         <div className={ProjectListItemStyles.icons}>
           <img onClick={deleteProject} src={deleteicon} alt="delete project" />
           <img onClick={editProject} src={editproject} alt="edit project" />

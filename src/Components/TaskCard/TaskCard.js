@@ -18,6 +18,7 @@ export default function TaskCard({ task, taskGroup }) {
   const { setEditTask, setDeleteTask } = useTasks();
   const { deleteProject, dispatch } = useProjects();
   const { name, description, createdAt, designLink, documentLink, tags } = task;
+  const nameToDisplay = name.length > 25 ? `${name.substring(0, 25)}...` : name;
   const navigate = useNavigate();
 
   const date = formatTaskDate(createdAt);
@@ -66,7 +67,7 @@ export default function TaskCard({ task, taskGroup }) {
         </div>
       </div>
       <div className={TaskCardStyles.name}>
-        <p>{name}</p>
+        <p>{nameToDisplay}</p>
         <p>{date}</p>
       </div>
       <div className={TaskCardStyles.description}>
