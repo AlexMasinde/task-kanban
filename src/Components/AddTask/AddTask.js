@@ -139,10 +139,10 @@ export default function AddTask() {
           ...taskInput,
           createdAt: serverTimestamp(),
           user: currentUser.uid,
-          project: selectedProject.id,
+          projectId: selectedProject.id,
           status: taskGroup,
         };
-        await addDoc(collection(database, "tasks"), newTask);
+        await addDoc(collection(database, "tasks"), { ...newTask });
         const localTask = { ...newTask, createdAt: Date.now() };
         setTasks([localTask, ...tasks]);
       }

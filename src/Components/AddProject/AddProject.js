@@ -15,6 +15,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
 import { validateProject } from "../../utils/validate";
+import { categories } from "../../utils/categories";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
 
@@ -140,6 +141,7 @@ export default function Addproject() {
           <SelectCategories
             selectedTags={selectedTags}
             setSelectedTags={setSelectedTags}
+            tags={categories}
           />
         </div>
         {errors.selectedTags && selectedTags.length === 0 && (

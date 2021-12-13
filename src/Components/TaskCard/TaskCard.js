@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTasks } from "../../contexts/TasksContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
-import formatDate from "../../utils/formatDate";
+import { formatTaskDate } from "../../utils/formatDate";
 
 import arrowright from "../../icons/arrowright.svg";
 import doc from "../../icons/doc.svg";
@@ -20,7 +20,7 @@ export default function TaskCard({ task, taskGroup }) {
   const { name, description, createdAt, designLink, documentLink, tags } = task;
   const navigate = useNavigate();
 
-  const date = formatDate(createdAt);
+  const date = formatTaskDate(createdAt);
 
   function editTask() {
     setEditTask(task);

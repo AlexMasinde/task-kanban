@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 
-import { categories } from "../../utils/categories";
-
 import arrowdown from "../../icons/arrowdown.svg";
 import arrowup from "../../icons/arrowup.svg";
 import closeicon from "../../icons/closeicon.svg";
 
 import SelectCategoriesStyles from "./SelectCategories.module.css";
 
-export default function SelectCategories({ selectedTags, setSelectedTags }) {
+export default function SelectCategories({
+  selectedTags,
+  setSelectedTags,
+  tags,
+}) {
   const [select, setSelect] = useState(false);
 
   function selectTags() {
@@ -63,7 +65,7 @@ export default function SelectCategories({ selectedTags, setSelectedTags }) {
       </div>
       {select && (
         <div className={SelectCategoriesStyles.list}>
-          {categories.map((category) => {
+          {tags.map((category) => {
             return (
               <div
                 onClick={() => addTags(category)}

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 
 import { useProjects } from "../../contexts/ProjectsContext";
 
+import { formatProjectDateTime } from "../../utils/formatDate";
+
 import editproject from "../../icons/edit.svg";
 import deleteicon from "../../icons/delete.svg";
 
@@ -13,16 +15,7 @@ export default function ProjectListItem({ project }) {
   const { createdAt, description, name } = project;
   const navigate = useNavigate();
 
-  const transformedDate = createdAt.toDate();
-  const dayDateOptions = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    weekday: "long",
-  };
-  const timeOptions = { hour: "numeric", minute: "numeric" };
-  const dayDate = transformedDate.toLocaleDateString("en-UK", dayDateOptions);
-  const time = transformedDate.toLocaleTimeString("en-UK", timeOptions);
+  const { dayDate, time } = formatProjectDateTime(createdAt);
 
   function setSelectedProject() {
     dispatch({
