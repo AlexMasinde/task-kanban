@@ -135,7 +135,7 @@ export default function Addproject() {
   }
 
   useEffect(() => {
-    const listener = window.addEventListener("beforeunload", (e) => {
+    const listener = window.addEventListener("close", (e) => {
       deleteSavedItem("projectToEdit");
     });
     return listener;
