@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   collection,
@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
 } from "@firebase/firestore";
+
 import { captureException } from "@sentry/react";
 
 import { database } from "../../firebase";
@@ -16,36 +17,50 @@ import { useProjects } from "../../contexts/ProjectsContext";
 
 import { validateProject } from "../../utils/validate";
 import { categories } from "../../utils/categories";
+import { projectToEdit } from "../../utils/projectOject";
+import { deleteSavedItem, fetchSavedItem } from "../../utils/localStorage";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
 
 import AddProjectStyles from "./AddProject.module.css";
-import { projectToEdit } from "../../utils/projectOject";
 
 export default function Addproject() {
   const { currentUser } = useAuth();
-  const { editProject, dispatch, projects } = useProjects();
-  const editing = editProject !== null;
-
-  const [name, setName] = useState(editing ? editProject.name : "");
-  const [description, setDescription] = useState(
-    editing ? editProject.description : ""
-  );
-  const [selectedTags, setSelectedTags] = useState(
-    editing ? editProject.tags : []
-  );
+  const { dispatch, projects } = useProjects();
+  const [editing, setEditing] = useState(false);
+  const [savedItemToEdit, setSavedItemToEdit] = useState(null);
+  const [project, setProject] = useState({
+    name: "",
+    description: "",
+    selectedTags: [],
+  });
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [writeError, setWriteError] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const savedProjectToEdit = fetchSavedItem("projectToEdit");
+
+    if (savedProjectToEdit) {
+      const { name, description, tags } = savedProjectToEdit;
+      setProject({
+        name,
+        description,
+        selectedTags: tags,
+      });
+      setSavedItemToEdit(savedProjectToEdit);
+      setEditing(true);
+    }
+  }, []);
+
   function handleName(e) {
     if (errors.name) {
       setErrors({ ...errors, name: "" });
     }
     const name = e.target.value;
-    setName(name);
+    setProject({ name, ...project });
   }
 
   function handleDescription(e) {
@@ -53,11 +68,12 @@ export default function Addproject() {
       setErrors({ ...errors, description: "" });
     }
     const description = e.target.value;
-    setDescription(description);
+    setProject({ description, ...project });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const { name, description, selectedTags } = project;
     const { valid, errors } = validateProject(name, description, selectedTags);
 
     if (!valid) {
@@ -73,14 +89,14 @@ export default function Addproject() {
           name,
           description,
           selectedTags,
-          editProject
+          savedItemToEdit
         );
         if (Object.keys(updatedProject).length > 0) {
-          const updateRef = doc(database, "projects", editProject.id);
+          const updateRef = doc(database, "projects", savedItemToEdit.id);
           await updateDoc(updateRef, updatedProject);
         }
         const uneditedProjects = projects.filter(
-          (project) => project.id !== editProject.id
+          (project) => project.id !== savedItemToEdit.id
         );
         const editedProject = {
           ...updatedProject,
@@ -89,7 +105,7 @@ export default function Addproject() {
         };
         const newProjects = [editedProject, ...uneditedProjects];
         dispatch({ type: "SET_PROJECTS", payload: newProjects });
-        dispatch({ type: "SET_EDIT_PROJECT", payload: null });
+        deleteSavedItem("projectToEdit");
       } else {
         const newProject = {
           name,
@@ -114,22 +130,30 @@ export default function Addproject() {
   }
 
   function close() {
+    deleteSavedItem("projectToEdit");
     navigate("/");
   }
+
+  useEffect(() => {
+    const listener = window.addEventListener("beforeunload", (e) => {
+      deleteSavedItem("projectToEdit");
+    });
+    return listener;
+  });
 
   return (
     <div className={AddProjectStyles.container}>
       <form onSubmit={handleSubmit}>
-        <h3>Add a new project</h3>
+        <h3>{editing ? "Edit Project" : "Add a new project"}</h3>
         <label>
           Project Name
-          <input value={name} onChange={handleName} type="text" />
+          <input value={project.name} onChange={handleName} type="text" />
         </label>
         {errors.name && <p>{errors.name}</p>}
         <label>
           Project Description
           <textarea
-            value={description}
+            value={project.description}
             onChange={handleDescription}
             rows="4"
             cols="50"
@@ -139,12 +163,12 @@ export default function Addproject() {
         {errors.description && <p>{errors.description}</p>}
         <div className={AddProjectStyles.tags}>
           <SelectCategories
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
+            project={project}
+            setProject={setProject}
             tags={categories}
           />
         </div>
-        {errors.selectedTags && selectedTags.length === 0 && (
+        {errors.selectedTags && project.selectedTags.length === 0 && (
           <p>{errors.selectedTags}</p>
         )}
         <div className={AddProjectStyles.buttons}>

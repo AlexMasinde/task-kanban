@@ -30,6 +30,7 @@ export default function ProjectListItem({ project }) {
       type: "SET_EDIT_PROJECT",
       payload: project,
     });
+    localStorage.setItem("projectToEdit", JSON.stringify(project));
     navigate("newproject");
   }
 
