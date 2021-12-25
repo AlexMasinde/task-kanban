@@ -6,9 +6,9 @@ import closeicon from "../../icons/closeicon.svg";
 
 import SelectCategoriesStyles from "./SelectCategories.module.css";
 
-export default function SelectCategories({ project, setProject, tags }) {
+export default function SelectCategories({ object, setObject, tags }) {
   const [select, setSelect] = useState(false);
-  const { selectedTags } = project;
+  const { selectedTags } = object;
 
   function selectTags() {
     setSelect(!select);
@@ -21,14 +21,14 @@ export default function SelectCategories({ project, setProject, tags }) {
     }
 
     const newTags = [...selectedTags, tag];
-    setProject({ ...project, selectedTags: newTags });
+    setObject({ ...object, selectedTags: newTags });
   }
 
   function removeTag(tag) {
     const newTags = selectedTags.filter(
       (selectedTag) => selectedTag.name !== tag.name
     );
-    setProject({ ...project, selectedTags: newTags });
+    setObject({ ...object, selectedTags: newTags });
   }
 
   return (

@@ -23,8 +23,6 @@ function reducer(state, action) {
       return { ...state, projectsError: action.payload };
     case "SET_PROJECTS_LOADING":
       return { ...state, projectsLoading: action.payload };
-    case "SET_EDIT_PROJECT":
-      return { ...state, editProject: action.payload };
     case "SET_DELETE_PROJECT":
       return { ...state, deleteProject: action.payload };
     default:
@@ -37,7 +35,6 @@ const initialState = {
   projectsError: null,
   projectsLoading: false,
   selectedProject: null,
-  editProject: null,
   deleteProject: null,
 };
 

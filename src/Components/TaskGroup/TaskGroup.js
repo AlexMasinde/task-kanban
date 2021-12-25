@@ -12,9 +12,10 @@ import TaskCard from "../TaskCard/TaskCard";
 import add from "../../icons/add.svg";
 
 import TaskGroupStyles from "./TaskGroup.module.css";
+import { deleteSavedItem } from "../../utils/localStorage";
 
 export default function TaskGroup({ taskGroup }) {
-  const { tasks, setEditTask, setTasks } = useTasks();
+  const { tasks, setTasks } = useTasks();
   const { selectedProject } = useProjects();
   const [draggingOver, setDraggingOver] = useState(false);
   const [taskUpdateError, setTaskUpdateError] = useState(null);
@@ -25,7 +26,7 @@ export default function TaskGroup({ taskGroup }) {
   );
 
   function addTask() {
-    setEditTask(null);
+    deleteSavedItem("taskToEdit");
     navigate(`addtask/${taskGroup}`);
   }
 

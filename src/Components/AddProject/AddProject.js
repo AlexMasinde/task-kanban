@@ -134,13 +134,6 @@ export default function Addproject() {
     navigate("/");
   }
 
-  useEffect(() => {
-    const listener = window.addEventListener("close", (e) => {
-      deleteSavedItem("projectToEdit");
-    });
-    return listener;
-  });
-
   return (
     <div className={AddProjectStyles.container}>
       <form onSubmit={handleSubmit}>
@@ -163,8 +156,8 @@ export default function Addproject() {
         {errors.description && <p>{errors.description}</p>}
         <div className={AddProjectStyles.tags}>
           <SelectCategories
-            project={project}
-            setProject={setProject}
+            object={project}
+            setObject={setProject}
             tags={categories}
           />
         </div>

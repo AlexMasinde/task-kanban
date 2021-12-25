@@ -24,7 +24,7 @@ export default function TaskCard({ task, taskGroup }) {
   const date = formatTaskDate(createdAt);
 
   function editTask() {
-    setEditTask(task);
+    localStorage.setItem("taskToEdit", JSON.stringify(task));
     navigate(`addtask/${taskGroup}`);
   }
 

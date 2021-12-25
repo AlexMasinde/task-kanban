@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Scrollbar } from "react-scrollbars-custom";
 
 import { useProjects } from "../../contexts/ProjectsContext";
+import { deleteSavedItem } from "../../utils/localStorage";
 
 import Loading from "../Loading/Loading";
 import ProjectListItem from "../ProjectListItem/ProjectListItem";
@@ -15,6 +16,7 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   function addProject() {
+    deleteSavedItem("projectToEdit");
     if (editProject) {
       dispatch({
         type: "SET_EDIT_PROJECT",

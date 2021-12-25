@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import {
   collection,
@@ -22,27 +22,22 @@ import SelectCategories from "../SelectCategories/SelectCategories";
 import AddTaskStyles from "./AddTask.module.css";
 
 import { taskToAdd, taskToEdit } from "../../utils/taskObject";
+import { deleteSavedItem, fetchSavedItem } from "../../utils/localStorage";
 
 export default function AddTask() {
   const { tasks, setTasks } = useTasks();
   const { currentUser } = useAuth();
   const { selectedProject } = useProjects();
-  const { editTask, setEditTask } = useTasks();
-  const editing = editTask !== null;
+  const [editing, setEditing] = useState(false);
+  const [savedTaskToEdit, setSavedTaskToEdit] = useState(null);
 
-  const [name, setName] = useState(editing ? editTask.name : "");
-  const [description, setDescription] = useState(
-    editing ? editTask.description : ""
-  );
-  const [documentLink, setDocumentLink] = useState(
-    editing ? editTask.documentLink : ""
-  );
-  const [designLink, setDesignLink] = useState(
-    editing ? editTask.designLink : ""
-  );
-  const [selectedTags, setSelectedTags] = useState(
-    editing ? editTask.tags : []
-  );
+  const [task, setTask] = useState({
+    name: "",
+    description: "",
+    selectedTags: [],
+    documentLink: "",
+    designLink: "",
+  });
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -50,12 +45,28 @@ export default function AddTask() {
   const { taskGroup } = useParams();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const savedTask = fetchSavedItem("taskToEdit");
+    if (savedTask) {
+      const { name, description, designLink, documentLink, tags } = savedTask;
+      setTask({
+        name,
+        description,
+        documentLink,
+        designLink,
+        selectedTags: tags,
+      });
+      setEditing(true);
+      setSavedTaskToEdit(savedTask);
+    }
+  }, []);
+
   function handleName(e) {
     if (errors.name) {
       setErrors({ ...errors, name: "" });
     }
     const name = e.target.value;
-    setName(name);
+    setTask({ name, ...task });
   }
 
   function handleDescription(e) {
@@ -63,7 +74,7 @@ export default function AddTask() {
       setErrors({ ...errors, description: "" });
     }
     const description = e.target.value;
-    setDescription(description);
+    setTask({ description, ...task });
   }
 
   function handleDocumentLink(e) {
@@ -71,7 +82,7 @@ export default function AddTask() {
       setErrors({ ...errors, documentLink: "" });
     }
     const documentLink = e.target.value;
-    setDocumentLink(documentLink);
+    setTask({ documentLink, ...task });
   }
 
   function handleDesignLink(e) {
@@ -79,11 +90,12 @@ export default function AddTask() {
       setErrors({ ...errors, designLink: "" });
     }
     const designLink = e.target.value;
-    setDesignLink(designLink);
+    setTask({ designLink, ...task });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const { name, description, documentLink, designLink, selectedTags } = task;
 
     const { valid, errors } = validateTask(
       name,
@@ -109,14 +121,16 @@ export default function AddTask() {
           documentLink,
           designLink,
           selectedTags,
-          editTask
+          savedTaskToEdit
         );
 
         if (Object.keys(updatedTask).length > 0) {
-          const updateTaskRef = doc(database, "tasks", editTask.id);
+          const updateTaskRef = doc(database, "tasks", savedTaskToEdit.id);
           await updateDoc(updateTaskRef, updatedTask);
         }
-        const uneditedTasks = tasks.filter((task) => task.id !== editTask.id);
+        const uneditedTasks = tasks.filter(
+          (task) => task.id !== savedTaskToEdit.id
+        );
         const editedTask = {
           ...updatedTask,
           user: currentUser.uid,
@@ -125,7 +139,7 @@ export default function AddTask() {
           createdAt: Date.now(),
         };
         setTasks([editedTask, ...uneditedTasks]);
-        setEditTask(null);
+        deleteSavedItem("taskToEdit");
       } else {
         const taskInput = taskToAdd(
           name,
@@ -157,7 +171,13 @@ export default function AddTask() {
   }
 
   function close() {
+    deleteSavedItem("taskToEdit");
     navigate("/");
+  }
+
+  if (!selectedProject) {
+    navigate("/");
+    return null;
   }
 
   return (
@@ -166,13 +186,13 @@ export default function AddTask() {
         <h3>Add New Task</h3>
         <label>
           Task Name
-          <input value={name} onChange={handleName} type="text" />
+          <input value={task.name} onChange={handleName} type="text" />
         </label>
         {errors.name && <p>{errors.name}</p>}
         <label>
           Task Description
           <textarea
-            value={description}
+            value={task.description}
             onChange={handleDescription}
             rows="4"
             cols="50"
@@ -183,7 +203,7 @@ export default function AddTask() {
         <label>
           SRS Document Link
           <input
-            value={documentLink}
+            value={task.documentLink}
             onChange={handleDocumentLink}
             type="text"
           />
@@ -191,17 +211,21 @@ export default function AddTask() {
         {errors.documentLink && <p>{errors.documentLink}</p>}
         <label>
           Figma Design Link
-          <input value={designLink} onChange={handleDesignLink} type="text" />
+          <input
+            value={task.designLink}
+            onChange={handleDesignLink}
+            type="text"
+          />
         </label>
         {errors.designLink && <p>{errors.designLink}</p>}
         <div className={AddTaskStyles.tags}>
           <SelectCategories
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
+            object={task}
+            setObject={setTask}
             tags={selectedProject.tags}
           />
         </div>
-        {errors.selectedTags && selectedTags.length === 0 && (
+        {errors.selectedTags && task.selectedTags.length === 0 && (
           <p>{errors.selectedTags}</p>
         )}
         <div className={AddTaskStyles.buttons}>
