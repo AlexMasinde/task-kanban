@@ -65,32 +65,32 @@ export default function AddTask() {
     if (errors.name) {
       setErrors({ ...errors, name: "" });
     }
-    const name = e.target.value;
-    setTask({ name, ...task });
+
+    setTask({ ...task, name: e.target.value });
   }
 
   function handleDescription(e) {
     if (errors.description) {
       setErrors({ ...errors, description: "" });
     }
-    const description = e.target.value;
-    setTask({ description, ...task });
+
+    setTask({ ...task, description: e.target.value });
   }
 
   function handleDocumentLink(e) {
     if (errors.documentLink) {
       setErrors({ ...errors, documentLink: "" });
     }
-    const documentLink = e.target.value;
-    setTask({ documentLink, ...task });
+
+    setTask({ ...task, documentLink: e.target.value });
   }
 
   function handleDesignLink(e) {
     if (errors.designLink) {
       setErrors({ ...errors, designLink: "" });
     }
-    const designLink = e.target.value;
-    setTask({ designLink, ...task });
+
+    setTask({ ...task, designLink: e.target.value });
   }
 
   async function handleSubmit(e) {

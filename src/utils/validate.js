@@ -56,7 +56,7 @@ export function validateTask(
     errors.documentLink = "Please provide a valid document URL";
   }
 
-  if (designLink && !isURL(designLink)) {
+  if (designLink && !isURL(designLink, { require_protocol: true })) {
     errors.designLink = "Please provide a valid design URL";
   }
 

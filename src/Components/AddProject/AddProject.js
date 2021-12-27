@@ -59,16 +59,16 @@ export default function Addproject() {
     if (errors.name) {
       setErrors({ ...errors, name: "" });
     }
-    const name = e.target.value;
-    setProject({ name, ...project });
+
+    setProject({ ...project, name: e.target.value });
   }
 
   function handleDescription(e) {
     if (errors.description) {
       setErrors({ ...errors, description: "" });
     }
-    const description = e.target.value;
-    setProject({ description, ...project });
+
+    setProject({ ...project, description: e.target.value });
   }
 
   async function handleSubmit(e) {

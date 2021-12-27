@@ -40,6 +40,7 @@ export default function SelectCategories({ object, setObject, tags }) {
               <div
                 style={{ background: `${tag.color}` }}
                 className={SelectCategoriesStyles.tag}
+                key={tag.name}
               >
                 <p>{tag.name}</p>
                 <img

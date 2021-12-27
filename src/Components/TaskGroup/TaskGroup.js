@@ -80,7 +80,13 @@ export default function TaskGroup({ taskGroup }) {
           className={TaskGroupStyles.cardscontainer}
         >
           {taskGroupTasks.map((taskGroupTask) => {
-            return <TaskCard taskGroup={taskGroup} task={taskGroupTask} />;
+            return (
+              <TaskCard
+                taskGroup={taskGroup}
+                task={taskGroupTask}
+                key={taskGroupTask.id}
+              />
+            );
           })}
           <div onClick={addTask} className={TaskGroupStyles.add}>
             <img src={add} alt="add task" />

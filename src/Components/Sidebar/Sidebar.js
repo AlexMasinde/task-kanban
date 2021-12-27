@@ -52,7 +52,10 @@ export default function Sidebar() {
             projects.length > 0 &&
             projects.map((project) => {
               return (
-                <div className={SidebarStyles.projectcontainer}>
+                <div
+                  className={SidebarStyles.projectcontainer}
+                  key={project.id}
+                >
                   <ProjectListItem project={project} />
                 </div>
               );

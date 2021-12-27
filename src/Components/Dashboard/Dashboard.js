@@ -32,7 +32,7 @@ export default function Dashboard() {
           <Scrollbar style={{ width: "100%", height: `calc(100vh - 100px)` }}>
             <div className={DashBoardStyles.taskgroups}>
               {taskGroups.map((taskGroup) => {
-                return <TaskGroup taskGroup={taskGroup} />;
+                return <TaskGroup taskGroup={taskGroup} key={taskGroup} />;
               })}
             </div>
           </Scrollbar>

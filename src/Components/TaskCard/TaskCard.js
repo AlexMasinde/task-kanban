@@ -55,6 +55,7 @@ export default function TaskCard({ task, taskGroup }) {
               <div
                 style={{ background: `${tag.color}` }}
                 className={TaskCardStyles.tag}
+                key={tag.color}
               >
                 <p>{tag.name}</p>
               </div>
