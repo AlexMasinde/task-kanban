@@ -36,7 +36,7 @@ export default function Navigation() {
             <p>
               My Account:{" "}
               <span>{`${
-                currentUser.displayName.split(" ")[0] ?? currentUser.email
+                currentUser.displayName ? currentUser.displayName.split(' ')[0] : currentUser.email
               }`}</span>
             </p>
           </Link>
