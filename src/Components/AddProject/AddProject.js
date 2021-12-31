@@ -17,7 +17,7 @@ import { useProjects } from "../../contexts/ProjectsContext";
 
 import { validateProject } from "../../utils/validate";
 import { categories } from "../../utils/categories";
-import { projectToEdit } from "../../utils/projectOject";
+import { getEditedObject, projectToEdit } from "../../utils/projectOject";
 import { deleteSavedItem, fetchSavedItem } from "../../utils/localStorage";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
@@ -98,12 +98,9 @@ export default function Addproject() {
         const uneditedProjects = projects.filter(
           (project) => project.id !== savedItemToEdit.id
         );
-        const editedProject = {
-          ...updatedProject,
-          user: currentUser.uid,
-          createdAt: Date.now(),
-        };
+        const editedProject = getEditedObject(updatedProject, savedItemToEdit);
         const newProjects = [editedProject, ...uneditedProjects];
+        console.log(editedProject);
         dispatch({ type: "SET_PROJECTS", payload: newProjects });
         deleteSavedItem("projectToEdit");
       } else {

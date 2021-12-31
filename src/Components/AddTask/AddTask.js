@@ -16,6 +16,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useProjects } from "../../contexts/ProjectsContext";
 
 import { validateTask } from "../../utils/validate";
+import { getEditedObject } from "../../utils/projectOject";
 
 import SelectCategories from "../SelectCategories/SelectCategories";
 
@@ -131,13 +132,7 @@ export default function AddTask() {
         const uneditedTasks = tasks.filter(
           (task) => task.id !== savedTaskToEdit.id
         );
-        const editedTask = {
-          ...updatedTask,
-          user: currentUser.uid,
-          project: selectedProject.id,
-          status: taskGroup,
-          createdAt: Date.now(),
-        };
+        const editedTask = getEditedObject(updatedTask, savedTaskToEdit);
         setTasks([editedTask, ...uneditedTasks]);
         deleteSavedItem("taskToEdit");
       } else {

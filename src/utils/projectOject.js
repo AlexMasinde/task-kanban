@@ -17,3 +17,14 @@ export function projectToEdit(name, description, selectedTags, editProject) {
 
   return updatedProject;
 }
+
+export function getEditedObject(updatedObject, savedObject) {
+  for (const key in savedObject) {
+    if (!(key in updatedObject)) {
+      updatedObject[key] = savedObject[key];
+    }
+  }
+
+  updatedObject.createdAt = Date.now();
+  return updatedObject;
+}
