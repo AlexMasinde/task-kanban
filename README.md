@@ -1,7 +1,7 @@
 # Task Kanban
 
 
-![Chat application built using react and firebase](https://user-images.githubusercontent.com/56753745/147792602-749a78ee-a203-44d6-8794-a76c4ef57b0d.png)
+![Chat application built using react and firebase](https://user-images.githubusercontent.com/56753745/147825975-1721e235-d9f9-4e2c-885f-1afe05e54f67.png)
 
 
 My goal for building this application was create a simple tool that I can use to track tasks across my projects. The complete project can be found here [Task Kanban](https://taskkanban.vercel.app/)
