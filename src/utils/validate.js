@@ -52,12 +52,16 @@ export function validateTask(
     errors.description = "Description is required";
   }
 
-  if (documentLink && !isURL(documentLink)) {
-    errors.documentLink = "Please provide a valid document URL";
+  if (documentLink.trim() !== "") {
+    if (!isURL(documentLink)) {
+      errors.documentLink = "Please provide a valid URL";
+    }
   }
 
-  if (designLink && !isURL(designLink, { require_protocol: true })) {
-    errors.designLink = "Please provide a valid design URL";
+  if (designLink.trim() !== "") {
+    if (!isURL(designLink)) {
+      errors.designLink = "Please provide a valid URL";
+    }
   }
 
   if (selectedTags.length === 0) {

@@ -161,7 +161,8 @@ export default function AddTask() {
     } catch (err) {
       setLoading(false);
       setWriteError("Could not add task. Please try again.");
-      captureException(err);
+      console.log(err);
+      // captureException(err);
     }
   }
 
@@ -178,7 +179,7 @@ export default function AddTask() {
   return (
     <div className={AddTaskStyles.container}>
       <form onSubmit={handleSubmit}>
-        <h3>Add New Task</h3>
+        <h3>{editing ? "Edit Task" : "Add New Task"}</h3>
         <label>
           Task Name
           <input value={task.name} onChange={handleName} type="text" />
