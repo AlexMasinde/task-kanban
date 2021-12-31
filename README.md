@@ -14,8 +14,8 @@ My goal for building this application was create a simple tool that I can use to
 
 * The following sample account can be used to access the application
 
-Email: smith@taskkanban.com
-Password: 123456
+**Email:** smith@taskkanban.com
+**Password:** 123456
 
 # Tech Stack 
 1. React for the frontend 
